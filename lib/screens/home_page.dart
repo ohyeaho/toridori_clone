@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
           child: Image.asset('images/toridori_icon.jpg'),
         ),
       ),
-      drawer: MainPageDrawer(),
+      drawer: SafeArea(child: MainPageDrawer()),
       body: ListView.builder(
         itemCount: 1,
         itemBuilder: (context, index) {
