@@ -135,7 +135,7 @@ class HomePage extends StatelessWidget {
                       height: 23,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: Colors.red.shade700,
+                        color: Colors.red.shade800,
                       ),
                       child: TextButton(
                         style: TextButton.styleFrom(
@@ -157,7 +157,7 @@ class HomePage extends StatelessWidget {
                       height: 23,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: Colors.red.shade700,
+                        color: Colors.red.shade800,
                       ),
                       child: TextButton(
                         style: TextButton.styleFrom(
@@ -178,7 +178,7 @@ class HomePage extends StatelessWidget {
                       height: 23,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: Colors.red.shade700,
+                        color: Colors.red.shade800,
                       ),
                       child: TextButton(
                         style: TextButton.styleFrom(
@@ -199,7 +199,7 @@ class HomePage extends StatelessWidget {
                       height: 23,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: Colors.red.shade700,
+                        color: Colors.red.shade800,
                       ),
                       child: TextButton(
                         style: TextButton.styleFrom(
