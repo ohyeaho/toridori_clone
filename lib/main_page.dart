@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toridori_clone/screens/favorite_page.dart';
-import 'package:toridori_clone/screens/home_page.dart';
+import 'package:toridori_clone/screens/home/home_page.dart';
 import 'package:toridori_clone/screens/offer_page.dart';
 import 'package:toridori_clone/screens/search_page.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toridori_clone/screens/check_offer_page.dart';
+import 'package:toridori_clone/screens/appbar_drawer/check_offer_page.dart';
 
 class MainPageAppbar extends StatelessWidget implements PreferredSizeWidget {
   final title;
