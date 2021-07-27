@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toridori_clone/screens/check_offer_page.dart';
 
 class MainPageAppbar extends StatelessWidget implements PreferredSizeWidget {
   final title;
@@ -16,7 +17,10 @@ class MainPageAppbar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () {
-            // todo: ボタン処理
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CheckOfferPage()),
+            );
           },
           icon: Icon(
             Icons.check,
