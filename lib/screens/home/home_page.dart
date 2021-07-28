@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:toridori_clone/components/main_page_appbar.dart';
 import 'package:toridori_clone/components/main_page_drawer.dart';
+import 'package:toridori_clone/screens/home/campaign_list_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -26,6 +27,7 @@ class HomePage extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
+                    /// グルメ
                     Container(
                       height: 100,
                       width: 100,
@@ -35,12 +37,18 @@ class HomePage extends StatelessWidget {
                       child: TextButton(
                         style: TextButton.styleFrom(padding: EdgeInsets.zero),
                         onPressed: () {
-                          // todo: ボタン処理
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CampaignListPage()),
+                          );
                         },
                         child: Image.asset('images/home_top_gourmet.jpg'),
                       ),
                     ),
                     SizedBox(width: 20),
+
+                    /// トラベル
                     Container(
                       height: 100,
                       width: 100,
@@ -56,6 +64,8 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 20),
+
+                    /// レジャー
                     Container(
                       height: 100,
                       width: 100,
@@ -71,6 +81,8 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 20),
+
+                    /// アパレル
                     Container(
                       height: 100,
                       width: 100,
@@ -86,6 +98,8 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 20),
+
+                    /// ビューティー
                     Container(
                       height: 100,
                       width: 100,
@@ -101,6 +115,8 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 20),
+
+                    /// その他
                     Container(
                       height: 100,
                       width: 100,
