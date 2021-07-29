@@ -291,7 +291,9 @@ class _CampaignListPageState extends State<CampaignListPage>
                     isScrollable: true,
                     unselectedLabelColor: Colors.grey,
                     indicatorColor: Colors.red.shade800,
+                    indicatorSize: TabBarIndicatorSize.label,
                     indicatorPadding: EdgeInsets.symmetric(horizontal: 0),
+                    labelPadding: EdgeInsets.symmetric(horizontal: 10),
                     tabs: [
                       Tab(
                         child: Text('新着順'),
