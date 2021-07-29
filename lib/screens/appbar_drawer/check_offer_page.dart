@@ -15,7 +15,7 @@ class CheckOfferPage extends StatelessWidget {
             height: 75,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.lime.shade800,
+              color: Colors.lime.shade800.withOpacity(0.6),
             ),
             child: Row(
               children: [
