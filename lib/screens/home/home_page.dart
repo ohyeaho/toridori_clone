@@ -59,11 +59,16 @@ class HomePage extends StatelessWidget {
                         Container(
                           height: 100,
                           width: 100,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           child: TextButton(
                             style: TextButton.styleFrom(padding: EdgeInsets.zero),
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => CampaignListPage()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => CampaignListPage()),
+                              );
                             },
                             child: Image.asset('${category.image}'),
                           ),
@@ -77,7 +82,13 @@ class HomePage extends StatelessWidget {
               SizedBox(height: 20),
 
               /// ソートタブ
-              Text('おすすめのキャンペーン', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              Text(
+                'おすすめのキャンペーン',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               SizedBox(height: 20),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -87,13 +98,23 @@ class HomePage extends StatelessWidget {
                       children: [
                         Container(
                           height: 23,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: Colors.red.shade800),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: Colors.red.shade800,
+                          ),
                           child: TextButton(
-                            style: TextButton.styleFrom(primary: Colors.white, padding: EdgeInsets.symmetric(horizontal: 8.0), minimumSize: Size(0, 0)),
+                            style: TextButton.styleFrom(
+                              primary: Colors.white,
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              minimumSize: Size(0, 0),
+                            ),
                             onPressed: () {
                               // todo: ボタン処理
                             },
-                            child: Text('$sortSelect', style: TextStyle(fontWeight: FontWeight.bold)),
+                            child: Text(
+                              '$sortSelect',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                         SizedBox(width: 10),
@@ -120,7 +141,10 @@ class HomePage extends StatelessWidget {
                       children: [
                         Expanded(
                           flex: 28,
-                          child: Image.network('${item[index]}', fit: BoxFit.cover),
+                          child: Image.network(
+                            '${item[index]}',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         Expanded(
                             flex: 13,
@@ -130,7 +154,10 @@ class HomePage extends StatelessWidget {
                                   flex: 5,
                                   child: Text(
                                     'あああああああああああああああああああああああああああああああああああああああああああああああ',
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 3,
                                   ),
@@ -143,7 +170,11 @@ class HomePage extends StatelessWidget {
                                         flex: 6,
                                         child: Row(
                                           children: [
-                                            Icon(FontAwesomeIcons.instagram, color: Colors.purple, size: 15),
+                                            Icon(
+                                              FontAwesomeIcons.instagram,
+                                              color: Colors.purple,
+                                              size: 15,
+                                            ),
                                             SizedBox(width: 5),
                                             Text(
                                               '0,000人以上',
