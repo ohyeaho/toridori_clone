@@ -5,9 +5,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:toridori_clone/components/main_page_appbar.dart';
 import 'package:toridori_clone/components/main_page_drawer.dart';
 import 'package:toridori_clone/models/category.dart';
+import 'package:toridori_clone/models/rakuten_api.dart';
 import 'package:toridori_clone/screens/home/campaign_list_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   List<Category> category = [
     Category(name: 'グルメ', image: 'images/home_top_gourmet.jpg'),
     Category(name: 'トラベル', image: 'images/home_top_travel.jpg'),
@@ -16,7 +22,9 @@ class HomePage extends StatelessWidget {
     Category(name: 'ビューティー', image: 'images/home_top_beauty.jpg'),
     Category(name: 'その他', image: 'images/home_top_other.jpg'),
   ];
+
   List<String> sort = ['すべて', '報酬がもらえる', '同伴者も無料', '自宅でできる'];
+
   List<String> item = [
     'https://www.tokyotravelpartners.jp/img/slide/sd04s.jpg',
     'https://img-cdn.guide.travel.co.jp/article/485/32832/EF34EAEE0DC54909A5D6031948F66BAC_L.jpg',
@@ -63,11 +71,13 @@ class HomePage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextButton(
-                            style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                            style:
+                                TextButton.styleFrom(padding: EdgeInsets.zero),
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => CampaignListPage()),
+                                MaterialPageRoute(
+                                    builder: (context) => CampaignListPage()),
                               );
                             },
                             child: Image.asset('${category.image}'),
@@ -88,6 +98,16 @@ class HomePage extends StatelessWidget {
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+              TextField(
+                onSubmitted: (value) async {
+                  // Map<String, String>? response = {};
+                  // response =
+                  String? image;
+                  image = await Item.getItem(value);
+                  print('test: $image');
+                  setState(() {});
+                },
               ),
               SizedBox(height: 20),
               SingleChildScrollView(
