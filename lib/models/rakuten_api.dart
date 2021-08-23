@@ -43,8 +43,9 @@ class Item {
 
   static Future<String?> getItem(String keyword) async {
     var _keyword = Uri.encodeComponent(keyword);
+    var applicationId = 1018749470638496278;
     String url =
-        'https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?keyword=$_keyword&format=json&applicationId=1018749470638496278';
+        'https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?&format=json&applicationId=$applicationId&keyword=$_keyword';
     try {
       var result = await get(Uri.parse(url));
       Map<String, dynamic> data = jsonDecode(result.body);
