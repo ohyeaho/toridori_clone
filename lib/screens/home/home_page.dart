@@ -22,9 +22,7 @@ class _HomePageState extends State<HomePage> {
     Category(name: 'ビューティー', image: 'images/home_top_beauty.jpg'),
     Category(name: 'その他', image: 'images/home_top_other.jpg'),
   ];
-
   List<String> sort = ['すべて', '報酬がもらえる', '同伴者も無料', '自宅でできる'];
-
   List<String> item = [
     'https://www.tokyotravelpartners.jp/img/slide/sd04s.jpg',
     'https://img-cdn.guide.travel.co.jp/article/485/32832/EF34EAEE0DC54909A5D6031948F66BAC_L.jpg',
@@ -38,6 +36,8 @@ class _HomePageState extends State<HomePage> {
     'https://img-cdn.guide.travel.co.jp/article/485/32832/EF34EAEE0DC54909A5D6031948F66BAC_L.jpg',
     'https://www.tokyotravelpartners.jp/img/slide/sd04s.jpg',
   ];
+  String? itemName;
+  String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -103,12 +103,27 @@ class _HomePageState extends State<HomePage> {
                 onSubmitted: (value) async {
                   // Map<String, String>? response = {};
                   // response =
-                  String? image;
-                  image = await Item.getItem(value);
-                  print('test: $image');
+                  Map<String, String>? response = {};
+                  response = await Item.getItem(value);
+                  errorMessage = response!['message'];
+                  if (response.containsKey('Items')) {
+                    itemName = response['Items'];
+                  }
+                  print('test: $itemName');
                   setState(() {});
                 },
               ),
+              Text(itemName != null ? itemName! : ''),
+              Text(
+                errorMessage != null ? errorMessage! : '',
+                style: TextStyle(color: Colors.red),
+              ),
+              // itemName != ''
+              //     ? Text(
+              //         itemName!,
+              //         style: TextStyle(color: Colors.white),
+              //       )
+              //     : Container(),
               SizedBox(height: 20),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,

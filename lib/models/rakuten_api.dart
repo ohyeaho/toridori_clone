@@ -41,7 +41,7 @@ class Item {
   //   }
   // }
 
-  static Future<String?> getItem(String keyword) async {
+  static Future<Map<String, String>?> getItem(String keyword) async {
     var _keyword = Uri.encodeComponent(keyword);
     var applicationId = 1018749470638496278;
     String url =
@@ -49,9 +49,13 @@ class Item {
     try {
       var result = await get(Uri.parse(url));
       Map<String, dynamic> data = jsonDecode(result.body);
-      String image = data['Items'][0]['Item']
-          ['itemName'] /*['mediumImageUrls'][0]['imageUrl']*/;
-      return image;
+      Map<String, String>? response = {};
+      if (data['Items'] != null) {
+        response['Items'] = data['Items'][0]['Item']['itemName'];
+      } else {
+        response['message'] = '正しい検索キーワードを指定してください';
+      }
+      return response;
     } catch (e) {
       print('エラー: $e');
       return null;
