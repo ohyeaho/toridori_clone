@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:toridori_clone/components/main_page_appbar.dart';
 import 'package:toridori_clone/components/main_page_drawer.dart';
@@ -23,21 +24,23 @@ class _HomePageState extends State<HomePage> {
     Category(name: 'その他', image: 'images/home_top_other.jpg'),
   ];
   List<String> sort = ['すべて', '報酬がもらえる', '同伴者も無料', '自宅でできる'];
-  List<String> item = [
-    'https://www.tokyotravelpartners.jp/img/slide/sd04s.jpg',
-    'https://img-cdn.guide.travel.co.jp/article/485/32832/EF34EAEE0DC54909A5D6031948F66BAC_L.jpg',
-    'https://www.tokyotravelpartners.jp/img/slide/sd04s.jpg',
-    'https://img-cdn.guide.travel.co.jp/article/485/32832/EF34EAEE0DC54909A5D6031948F66BAC_L.jpg',
-    'https://www.tokyotravelpartners.jp/img/slide/sd04s.jpg',
-    'https://img-cdn.guide.travel.co.jp/article/485/32832/EF34EAEE0DC54909A5D6031948F66BAC_L.jpg',
-    'https://www.tokyotravelpartners.jp/img/slide/sd04s.jpg',
-    'https://img-cdn.guide.travel.co.jp/article/485/32832/EF34EAEE0DC54909A5D6031948F66BAC_L.jpg',
-    'https://www.tokyotravelpartners.jp/img/slide/sd04s.jpg',
-    'https://img-cdn.guide.travel.co.jp/article/485/32832/EF34EAEE0DC54909A5D6031948F66BAC_L.jpg',
-    'https://www.tokyotravelpartners.jp/img/slide/sd04s.jpg',
-  ];
-  String? itemName;
+  Item? item;
   String? errorMessage;
+
+  static const spinKit = SpinKitCircle(
+    color: Colors.red,
+    size: 100.0,
+  );
+
+  // rakuten api 取得
+  @override
+  void initState() {
+    super.initState();
+    Future(() async {
+      item = await Item.getItem('おすすめ');
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,31 +102,33 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              TextField(
-                onSubmitted: (value) async {
-                  // Map<String, String>? response = {};
-                  // response =
-                  Map<String, String>? response = {};
-                  response = await Item.getItem(value);
-                  errorMessage = response!['message'];
-                  if (response.containsKey('Items')) {
-                    itemName = response['Items'];
-                  }
-                  print('test: $itemName');
-                  setState(() {});
-                },
-              ),
-              Text(itemName != null ? itemName! : ''),
-              Text(
-                errorMessage != null ? errorMessage! : '',
-                style: TextStyle(color: Colors.red),
-              ),
+              // TextField(
+              //   onSubmitted: (value) async {
+              //     item = await Item.getItem('おすすめ');
+              //     // Map<String, String>? response = {};
+              //     // response = await Item.getItem(value);
+              //     // errorMessage = response!['message'];
+              //     // if (response.containsKey('Items')) {
+              //     //   itemName = response['Items'];
+              //     // }
+              //     // print('test: $itemName');
+              //     setState(() {});
+              //   },
+              // ),
+
+              /// rakuten api test
+              // Text(itemName != null ? itemName! : ''),
+              // Text(
+              //   errorMessage != null ? errorMessage! : '',
+              //   style: TextStyle(color: Colors.red),
+              // ),
               // itemName != ''
               //     ? Text(
               //         itemName!,
               //         style: TextStyle(color: Colors.white),
               //       )
               //     : Container(),
+              ///ここまでtest
               SizedBox(height: 20),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -160,35 +165,27 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 20),
 
-              /// 商品リスト
-              GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // grid数
-                    crossAxisSpacing: 18, // grid間横スペース
-                    mainAxisSpacing: 20, // grid間縦スペース
-                    childAspectRatio: 0.65, // grid大きさ
-                  ),
-                  physics: NeverScrollableScrollPhysics(), // listスクロール無効
-                  shrinkWrap: true, // list余白削除
-                  itemCount: item.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        Expanded(
-                          flex: 28,
-                          child: Image.network(
-                            '${item[index]}',
-                            fit: BoxFit.cover,
+              // item test
+              item != null
+                  ? SizedBox(
+                      height: 200,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 28,
+                            child: Image.network(
+                              '${item!.image}',
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        Expanded(
+                          Expanded(
                             flex: 13,
                             child: Column(
                               children: [
                                 Expanded(
                                   flex: 5,
                                   child: Text(
-                                    'あああああああああああああああああああああああああああああああああああああああああああああああ',
+                                    '${item!.name}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
@@ -212,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             SizedBox(width: 5),
                                             Text(
-                                              '0,000人以上',
+                                              '${item!.price}人以上',
                                               style: TextStyle(fontSize: 11),
                                             ),
                                           ],
@@ -229,37 +226,86 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ],
-                            )),
-                      ],
-                    );
-                    // return Image.network('${item[index]}');
-                  }),
-              // Column(
-              //   children: item.map((itemSelect) {
-              //     final resultEven = item.where((e) => e % 2 == 0);
-              //     return Column(
-              //       children: [
-              //         Container(
-              //           height: 250,
-              //           child: Row(
-              //             children: [
-              //               Expanded(
-              //                   child: Padding(
-              //                 padding: const EdgeInsets.all(8.0),
-              //                 child: Image.network('$itemSelect'),
-              //               )),
-              //               Expanded(
-              //                   child: Padding(
-              //                 padding: const EdgeInsets.all(8.0),
-              //                 child: Image.network('$itemSelect'),
-              //               ))
-              //             ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Center(child: spinKit),
+
+              /// 商品リスト
+              // GridView.builder(
+              //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //       crossAxisCount: 2, // grid数
+              //       crossAxisSpacing: 18, // grid間横スペース
+              //       mainAxisSpacing: 20, // grid間縦スペース
+              //       childAspectRatio: 0.65, // grid大きさ
+              //     ),
+              //     physics: NeverScrollableScrollPhysics(), // listスクロール無効
+              //     shrinkWrap: true, // list余白削除
+              //     itemCount: item.length,
+              //     itemBuilder: (context, index) {
+              //       return Column(
+              //         children: [
+              //           Expanded(
+              //             flex: 28,
+              //             child: Image.network(
+              //               '${item[index]}',
+              //               fit: BoxFit.cover,
+              //             ),
               //           ),
-              //         )
-              //       ],
-              //     );
-              //   }).toList(),
-              // ),
+              //           Expanded(
+              //               flex: 13,
+              //               child: Column(
+              //                 children: [
+              //                   Expanded(
+              //                     flex: 5,
+              //                     child: Text(
+              //                       'あああああああああああああああああああああああああああああああああああああああああああああああ',
+              //                       style: TextStyle(
+              //                         fontWeight: FontWeight.bold,
+              //                         fontSize: 14,
+              //                       ),
+              //                       overflow: TextOverflow.ellipsis,
+              //                       maxLines: 3,
+              //                     ),
+              //                   ),
+              //                   Expanded(
+              //                     flex: 2,
+              //                     child: Row(
+              //                       children: [
+              //                         Expanded(
+              //                           flex: 6,
+              //                           child: Row(
+              //                             children: [
+              //                               Icon(
+              //                                 FontAwesomeIcons.instagram,
+              //                                 color: Colors.purple,
+              //                                 size: 15,
+              //                               ),
+              //                               SizedBox(width: 5),
+              //                               Text(
+              //                                 '0,000人以上',
+              //                                 style: TextStyle(fontSize: 11),
+              //                               ),
+              //                             ],
+              //                           ),
+              //                         ),
+              //                         Expanded(
+              //                           flex: 1,
+              //                           child: Icon(
+              //                             Icons.favorite,
+              //                             color: Colors.grey,
+              //                           ),
+              //                         ),
+              //                       ],
+              //                     ),
+              //                   ),
+              //                 ],
+              //               )),
+              //         ],
+              //       );
+              //     }),
               SizedBox(height: 20)
             ],
           );
