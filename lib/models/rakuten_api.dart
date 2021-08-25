@@ -36,7 +36,8 @@ class Item {
         return Item(
           name: item['Item']['itemName'],
           image: item['Item']['mediumImageUrls'][0]['imageUrl'],
-          price: NumberFormat('#,##0').format(item['Item']['itemPrice']),
+          price: NumberFormat('#,##0')
+              .format(item['Item']['itemPrice']), // 0,000表記
         );
       }).toList();
       return items;
