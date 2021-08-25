@@ -1,13 +1,16 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 class Item {
   String name; // 商品の名前
   String image; // 商品画像
   String caption; // 商品の説明
-  int? price; // 商品の値段
+  String? price; // 商品の値段
   DateTime? time;
+
+  final priceFormat = NumberFormat('#,###.0');
 
   Item({
     this.name = '',
@@ -33,7 +36,7 @@ class Item {
         return Item(
           name: item['Item']['itemName'],
           image: item['Item']['mediumImageUrls'][0]['imageUrl'],
-          price: item['Item']['itemPrice'],
+          price: NumberFormat('#,##0').format(item['Item']['itemPrice']),
         );
       }).toList();
       return items;
