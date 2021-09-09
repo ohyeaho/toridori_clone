@@ -1,7 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:toridori_clone/screens/appbar_drawer/profile/profile_config/profile_config_page.dart';
 import 'package:toridori_clone/screens/appbar_drawer/sns_connect_page.dart';
+import 'package:toridori_clone/signup/signup_top_page.dart';
+
+// class MainPageDrawer extends StatefulWidget {
+//   const MainPageDrawer({Key? key}) : super(key: key);
+//
+//   @override
+//   _MainPageDrawerState createState() => _MainPageDrawerState();
+// }
+//
+// class _MainPageDrawerState extends State<MainPageDrawer> {
 
 class MainPageDrawer extends StatelessWidget {
   @override
@@ -18,20 +29,15 @@ class MainPageDrawer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(75),
-                        child: Image.asset('images/profile_icon.jpg'),
-                      ),
+                    CircleAvatar(
+                      radius: 50,
+                      child: Image.asset('images/profile_icon.jpg'),
                     ),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => SnsConnectPage()),
+                          MaterialPageRoute(builder: (context) => SnsConnectPage()),
                         );
                       },
                       child: Row(
@@ -101,11 +107,10 @@ class MainPageDrawer extends StatelessWidget {
                     color: Colors.red,
                   ),
                   onTap: () {
-                    //todo: ボタン処理
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SnsConnect()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileConfigPage()),
+                    );
                   },
                 ),
                 ListTile(
@@ -134,10 +139,10 @@ class MainPageDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     //todo: ボタン処理
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SnsConnect()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignupTopPage()),
+                    );
                   },
                 ),
                 ListTile(
