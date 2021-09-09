@@ -37,4 +37,25 @@ class Authentication {
       return e;
     }
   }
+
+  /// サインインメソッド
+  Future<dynamic> signin({String? email, String? password}) async {
+    try {
+      final UserCredential result = await auth.signInWithEmailAndPassword(
+        email: email!,
+        password: password!,
+      );
+      currentFirebaseUser = result.user;
+      print('ログイン成功');
+      return true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+        return 'このメールアドレスのユーザーは見つかりませんでした';
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+        return 'パスワードが間違っています';
+      }
+    }
+  }
 }

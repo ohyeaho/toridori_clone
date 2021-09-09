@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:toridori_clone/signup/login_page.dart';
 import 'package:toridori_clone/signup/signup_page.dart';
 
 class SignupTopPage extends StatelessWidget {
@@ -147,6 +148,12 @@ class SignupTopPage extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           // todo: ボタン処理
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
