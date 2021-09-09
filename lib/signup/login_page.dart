@@ -137,7 +137,7 @@ class LoginPage extends StatelessWidget {
                             password: passwordController.text,
                           );
                           if (result == true) {
-                            ShowDialog().alertShowDialog(context, 'ログイン');
+                            ShowDialog.alertShowDialog(context, 'ログイン');
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -145,7 +145,7 @@ class LoginPage extends StatelessWidget {
                               ),
                             );
                           } else {
-                            ShowDialog().alertShowDialog(context, result.toString());
+                            ShowDialog.alertShowDialog(context, result.toString());
                           }
                         }
                       },

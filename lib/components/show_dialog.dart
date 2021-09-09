@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ShowDialog {
-  Future? alertShowDialog(
+  static Future? alertShowDialog(
     BuildContext context,
     String? title,
-  ) {
-    showDialog(
+  ) async {
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(

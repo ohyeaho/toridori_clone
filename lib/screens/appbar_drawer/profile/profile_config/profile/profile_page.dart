@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toridori_clone/components/back_appbar.dart';
+import 'package:toridori_clone/components/show_dialog.dart';
+import 'package:toridori_clone/utils/authentication.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -34,6 +37,14 @@ class _ProfilePageState extends State<ProfilePage> {
         image = File(pickedFile.path);
       });
     }
+  }
+
+  Future<void> uploadImage(String uid) async {
+    final FirebaseStorage storageInstance = FirebaseStorage.instance;
+    final Reference ref = storageInstance.ref();
+    await ref.child(uid).putFile(image!);
+    String downloadUrl = await storageInstance.ref(uid).getDownloadURL();
+    print('image_path: $downloadUrl');
   }
 
   @override
@@ -254,7 +265,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Container(
                   width: 300,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await uploadImage(Authentication.currentFirebaseUser!.uid);
+                      await ShowDialog.alertShowDialog(context, '変更を保存しました');
+                      Navigator.pop(context);
+                    },
                     child: Text(
                       '変更を保存する',
                       style: TextStyle(fontSize: 16),

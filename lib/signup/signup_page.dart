@@ -247,7 +247,7 @@ class SignupPage extends StatelessWidget {
                             password: passwordController.text,
                           );
                           if (result == true) {
-                            ShowDialog().alertShowDialog(context, '登録完了しました');
+                            ShowDialog.alertShowDialog(context, '登録完了しました');
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -255,7 +255,7 @@ class SignupPage extends StatelessWidget {
                               ),
                             );
                           } else {
-                            ShowDialog().alertShowDialog(context, result.toString());
+                            ShowDialog.alertShowDialog(context, result.toString());
                           }
                         }
                       },
