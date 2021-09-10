@@ -2,10 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toridori_clone/components/show_dialog.dart';
 import 'package:toridori_clone/main_page.dart';
+import 'package:toridori_clone/models/account.dart';
 import 'package:toridori_clone/utils/authentication.dart';
+import 'package:toridori_clone/utils/firestore/users.dart';
 
 class SignupPage extends StatelessWidget {
   final TextEditingController nickNameController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController birthdayController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -88,6 +92,7 @@ class SignupPage extends StatelessWidget {
                                 ),
                               ),
                               TextFormField(
+                                controller: genderController,
                                 cursorColor: Colors.red,
                                 style: TextStyle(color: Colors.grey.shade400),
                                 decoration: InputDecoration(
@@ -123,6 +128,7 @@ class SignupPage extends StatelessWidget {
                                 ),
                               ),
                               TextFormField(
+                                controller: birthdayController,
                                 cursorColor: Colors.red,
                                 style: TextStyle(color: Colors.grey.shade400),
                                 decoration: InputDecoration(
@@ -241,13 +247,20 @@ class SignupPage extends StatelessWidget {
                     child: TextButton(
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          dynamic result = await Authentication().signup(
+                          dynamic result = await Authentication.signup(
                             nickName: nickNameController.text,
                             email: emailController.text,
                             password: passwordController.text,
                           );
                           if (result == true) {
-                            ShowDialog.alertShowDialog(context, '登録完了しました');
+                            Account newAccount = Account(
+                              nickName: nickNameController.text,
+                              gender: genderController.text,
+                              birthday: birthdayController.text,
+                              userId: Authentication.currentFirebaseUser!.uid,
+                            );
+                            await UserFirestore.setUser(newAccount);
+                            await ShowDialog.alertShowDialog(context, '登録完了しました');
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

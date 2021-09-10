@@ -7,20 +7,20 @@ class Authentication {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   /// サインアップメソッド
-  Future<dynamic> signup({String? nickName, String? email, String? password}) async {
+  static Future<dynamic> signup({String? nickName, String? email, String? password}) async {
     try {
       await auth.createUserWithEmailAndPassword(
         email: email!,
         password: password!,
       );
       print('アカウント作成成功');
-      await users
-          .add({
-            'nickName': nickName,
-            'createdAt': Timestamp.now(),
-          })
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
+      // await users
+      //     .add({
+      //       'nickName': nickName,
+      //       'createdAt': Timestamp.now(),
+      //     })
+      //     .then((value) => print("User Added"))
+      //     .catchError((error) => print("Failed to add user: $error"));
       return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

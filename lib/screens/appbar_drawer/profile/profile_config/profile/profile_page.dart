@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:toridori_clone/components/back_appbar.dart';
 import 'package:toridori_clone/components/show_dialog.dart';
 import 'package:toridori_clone/utils/authentication.dart';
+import 'package:toridori_clone/utils/firestore/users.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
   File? image;
   ImagePicker picker = ImagePicker();
 
-  Future<void> getImageFromGallery() async {
+  Future getImageFromGallery() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
@@ -39,12 +40,13 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future<void> uploadImage(String uid) async {
+  Future<String> uploadImage(String uid) async {
     final FirebaseStorage storageInstance = FirebaseStorage.instance;
     final Reference ref = storageInstance.ref();
     await ref.child(uid).putFile(image!);
     String downloadUrl = await storageInstance.ref(uid).getDownloadURL();
     print('image_path: $downloadUrl');
+    return downloadUrl;
   }
 
   @override
@@ -266,7 +268,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 300,
                   child: TextButton(
                     onPressed: () async {
-                      await uploadImage(Authentication.currentFirebaseUser!.uid);
+                      String imagePath = await uploadImage(Authentication.currentFirebaseUser!.uid);
+                      await UserFirestore.setUserImage(imagePath);
                       await ShowDialog.alertShowDialog(context, '変更を保存しました');
                       Navigator.pop(context);
                     },
