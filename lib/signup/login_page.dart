@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toridori_clone/components/show_dialog.dart';
 import 'package:toridori_clone/main_page.dart';
 import 'package:toridori_clone/utils/authentication.dart';
+import 'package:toridori_clone/utils/firestore/users.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -132,18 +134,21 @@ class LoginPage extends StatelessWidget {
                     child: TextButton(
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          dynamic result = await Authentication().signin(
+                          dynamic result = await Authentication.signIn(
                             email: emailController.text,
                             password: passwordController.text,
                           );
-                          if (result == true) {
-                            ShowDialog.alertShowDialog(context, 'ログイン');
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MainPage(),
-                              ),
-                            );
+                          if (result is UserCredential) {
+                            var _result = await UserFirestore.getUser(result.user!.uid);
+                            if (_result == true) {
+                              ShowDialog.alertShowDialog(context, 'ログイン');
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MainPage(),
+                                ),
+                              );
+                            }
                           } else {
                             ShowDialog.alertShowDialog(context, result.toString());
                           }

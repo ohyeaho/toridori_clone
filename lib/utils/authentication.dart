@@ -1,32 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:toridori_clone/models/account.dart';
 
 class Authentication {
   static final FirebaseAuth auth = FirebaseAuth.instance;
-  static User? currentFirebaseUser;
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  static User? currentFirebaseUser = FirebaseAuth.instance.currentUser;
+  static Account? myAccount;
 
   /// サインアップメソッド
-  static Future<dynamic> signup({String? nickName, String? email, String? password}) async {
+  static Future<dynamic> signUp({String? nickName, String? email, String? password}) async {
     try {
-      await auth.createUserWithEmailAndPassword(
+      UserCredential _result = await auth.createUserWithEmailAndPassword(
         email: email!,
         password: password!,
       );
       print('アカウント作成成功');
-      // await users
-      //     .add({
-      //       'nickName': nickName,
-      //       'createdAt': Timestamp.now(),
-      //     })
-      //     .then((value) => print("User Added"))
-      //     .catchError((error) => print("Failed to add user: $error"));
-      return true;
+      return _result;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         return 'パスワードが弱すぎます';
       } else if (e.code == 'email-already-in-use') {
-        return 'すでに使われているアカウントです';
+        return 'このメールアドレスはすでに使われています';
       } else if (e.code == 'invalid-email') {
         return 'メールアドレスが無効です';
       } else {
@@ -39,15 +32,15 @@ class Authentication {
   }
 
   /// サインインメソッド
-  Future<dynamic> signin({String? email, String? password}) async {
+  static Future<dynamic> signIn({String? email, String? password}) async {
     try {
-      final UserCredential result = await auth.signInWithEmailAndPassword(
+      final UserCredential _result = await auth.signInWithEmailAndPassword(
         email: email!,
         password: password!,
       );
-      currentFirebaseUser = result.user;
+      currentFirebaseUser = _result.user;
       print('ログイン成功');
-      return true;
+      return _result;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');

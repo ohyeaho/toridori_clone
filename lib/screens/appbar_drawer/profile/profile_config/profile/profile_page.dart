@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:toridori_clone/components/back_appbar.dart';
+import 'package:toridori_clone/components/function_image.dart';
 import 'package:toridori_clone/components/show_dialog.dart';
+import 'package:toridori_clone/models/account.dart';
 import 'package:toridori_clone/utils/authentication.dart';
 import 'package:toridori_clone/utils/firestore/users.dart';
 
@@ -24,35 +24,26 @@ class _ProfilePageState extends State<ProfilePage> {
 //
 //
 // class ProfilePage extends StatelessWidget {
-  final TextEditingController nickNameController = TextEditingController();
-  final TextEditingController areaController = TextEditingController();
-  final TextEditingController profileController = TextEditingController();
-  final TextEditingController tagController = TextEditingController();
+  TextEditingController nickNameController = TextEditingController();
+  TextEditingController areaController = TextEditingController();
+  TextEditingController introductionController = TextEditingController();
+  TextEditingController tagController = TextEditingController();
+  Account myAccount = Authentication.myAccount!;
   File? image;
-  ImagePicker picker = ImagePicker();
 
-  Future getImageFromGallery() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        image = File(pickedFile.path);
-      });
-    }
-  }
-
-  Future<String> uploadImage(String uid) async {
-    final FirebaseStorage storageInstance = FirebaseStorage.instance;
-    final Reference ref = storageInstance.ref();
-    await ref.child(uid).putFile(image!);
-    String downloadUrl = await storageInstance.ref(uid).getDownloadURL();
-    print('image_path: $downloadUrl');
-    return downloadUrl;
+  @override
+  void initState() {
+    super.initState();
+    nickNameController = TextEditingController(text: myAccount.nickName);
+    areaController = TextEditingController(text: myAccount.area);
+    introductionController = TextEditingController(text: myAccount.introduction);
+    tagController = TextEditingController(text: myAccount.tag);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppbar(title: 'プロフィールを設定する'),
+      appBar: BackAppbar.createAppBar('プロフィールを設定する'),
       body: Stack(
         children: [
           Padding(
@@ -71,13 +62,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CircleAvatar(
-                          foregroundImage: image == null ? null : FileImage(image!),
+                          foregroundImage: image == null
+                              ? myAccount.imagePath != ''
+                                  ? NetworkImage(myAccount.imagePath)
+                                  : null
+                              : FileImage(image!) as ImageProvider,
                           radius: 40,
                           child: Image.asset('images/profile_icon.jpg'),
                         ),
                         TextButton(
-                          onPressed: () {
-                            getImageFromGallery();
+                          onPressed: () async {
+                            var result = await FunctionImage.getImageFromGallery();
+                            if (result != null) {
+                              setState(() {
+                                image = File(result.path);
+                              });
+                            }
                           },
                           child: Text(
                             '変更する',
@@ -181,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           TextFormField(
-                            controller: profileController,
+                            controller: introductionController,
                             cursorColor: Colors.red,
                             maxLength: 200,
                             maxLines: null,
@@ -268,10 +268,38 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 300,
                   child: TextButton(
                     onPressed: () async {
-                      String imagePath = await uploadImage(Authentication.currentFirebaseUser!.uid);
-                      await UserFirestore.setUserImage(imagePath);
-                      await ShowDialog.alertShowDialog(context, '変更を保存しました');
-                      Navigator.pop(context);
+                      // String imagePath = await FunctionImage.uploadImage(Authentication.currentFirebaseUser!.uid, image!);
+                      // await UserFirestore.setUserImage(imagePath);
+                      String imagePath = '';
+                      if (image == null) {
+                        imagePath = myAccount.imagePath;
+                      } else {
+                        var result = await FunctionImage.uploadImage(Authentication.currentFirebaseUser!.uid, image!);
+                        imagePath = result;
+                      }
+                      Account updateAccount = Account(
+                        imagePath: imagePath,
+                        nickName: nickNameController.text,
+                        area: areaController.text,
+                        introduction: introductionController.text,
+                        tag: tagController.text,
+                      );
+                      Authentication.myAccount = updateAccount;
+                      var result = await UserFirestore.updateProfile(updateAccount);
+                      // Authentication.myAccount = updateAccount;
+                      // var result = await UserFirestore.updateProfile(
+                      //   imagePath: imagePath,
+                      //   nickName: nickNameController.text,
+                      //   area: areaController.text,
+                      //   introduction: introductionController.text,
+                      //   tag: tagController.text,
+                      // );
+                      if (result == true) {
+                        await ShowDialog.alertShowDialog(context, '変更を保存しました');
+                        Navigator.pop(context, true);
+                      }
+                      // await ShowDialog.alertShowDialog(context, '変更を保存しました');
+                      // Navigator.pop(context);
                     },
                     child: Text(
                       '変更を保存する',

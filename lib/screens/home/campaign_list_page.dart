@@ -214,8 +214,7 @@ class CampaignListPage extends StatefulWidget {
   _CampaignListPageState createState() => _CampaignListPageState();
 }
 
-class _CampaignListPageState extends State<CampaignListPage>
-    with SingleTickerProviderStateMixin {
+class _CampaignListPageState extends State<CampaignListPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -233,7 +232,7 @@ class _CampaignListPageState extends State<CampaignListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: BackAppbar(title: 'キャンペーン一覧'),
+        appBar: BackAppbar.createAppBar('キャンペーン一覧'),
         body: NestedScrollView(
             headerSliverBuilder: (context, value) {
               return [
@@ -242,9 +241,7 @@ class _CampaignListPageState extends State<CampaignListPage>
                     backgroundColor: Colors.black,
                     automaticallyImplyLeading: false,
                     // title: Text('Library'),
-                    bottom: PreferredSize(
-                        preferredSize: Size.fromHeight(30),
-                        child: _buildTabsRow())),
+                    bottom: PreferredSize(preferredSize: Size.fromHeight(30), child: _buildTabsRow())),
               ];
             },
             body: _tabBody()));
@@ -254,12 +251,9 @@ class _CampaignListPageState extends State<CampaignListPage>
     return TabBarView(
       controller: _tabController,
       children: [
-        Container(
-            child: Center(child: Icon(Icons.car_rental, color: Colors.white))),
-        Container(
-            child: Center(child: Icon(Icons.car_rental, color: Colors.white))),
-        Container(
-            child: Center(child: Icon(Icons.car_rental, color: Colors.white))),
+        Container(child: Center(child: Icon(Icons.car_rental, color: Colors.white))),
+        Container(child: Center(child: Icon(Icons.car_rental, color: Colors.white))),
+        Container(child: Center(child: Icon(Icons.car_rental, color: Colors.white))),
         // Container(
         //     child: Center(child: Icon(Icons.car_rental, color: Colors.white))),
       ],

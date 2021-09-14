@@ -7,7 +7,7 @@ class CheckOfferPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppbar(title: '対応が必要なオファー'),
+      appBar: BackAppbar.createAppBar('対応が必要なオファー'),
       body: Column(
         children: [
           SizedBox(height: 20),

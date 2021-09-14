@@ -7,7 +7,7 @@ class SnsConnectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppbar(title: 'SNSを連携する'),
+      appBar: BackAppbar.createAppBar('SNSを連携する'),
     );
   }
 }
