@@ -1,20 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:toridori_clone/models/account.dart';
 
 class Authentication {
-  static final FirebaseAuth auth = FirebaseAuth.instance;
-  static User? currentFirebaseUser = FirebaseAuth.instance.currentUser;
-  static Account? myAccount;
+  final FirebaseAuth auth;
+  Authentication(this.auth);
+  Stream<User?> get authState => auth.idTokenChanges();
+  // isUserLogin = _auth.currentUser?.uid ?? false;
 
   /// サインアップメソッド
-  static Future<dynamic> signUp({String? nickName, String? email, String? password}) async {
+  Future<dynamic> signUp({String? nickName, String? email, String? password}) async {
     try {
-      UserCredential _result = await auth.createUserWithEmailAndPassword(
+      UserCredential result = await auth.createUserWithEmailAndPassword(
         email: email!,
         password: password!,
       );
+      User? user = result.user;
+      user!.updateDisplayName(nickName);
       print('アカウント作成成功');
-      return _result;
+      return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         return 'パスワードが弱すぎます';
@@ -32,15 +34,14 @@ class Authentication {
   }
 
   /// サインインメソッド
-  static Future<dynamic> signIn({String? email, String? password}) async {
+  Future<dynamic> signIn({String? email, String? password}) async {
     try {
-      final UserCredential _result = await auth.signInWithEmailAndPassword(
+      await auth.signInWithEmailAndPassword(
         email: email!,
         password: password!,
       );
-      currentFirebaseUser = _result.user;
       print('ログイン成功');
-      return _result;
+      return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -48,6 +49,24 @@ class Authentication {
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
         return 'パスワードが間違っています';
+      }
+    }
+  }
+
+  /// ログアウトメソッド
+  Future signOut() async {
+    await auth.signOut();
+    print('ログアウト完了');
+  }
+
+  ///アカウント削除メソッド
+  static Future deleteAuth() async {
+    try {
+      await FirebaseAuth.instance.currentUser!.delete();
+      print('アカウント削除完了');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        print('The user must reauthenticate before this operation can be executed.');
       }
     }
   }

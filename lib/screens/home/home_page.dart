@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   List<String> sort = ['すべて', '報酬がもらえる', '同伴者も無料', '自宅でできる'];
   List<Item>? item;
 
-  // rakuten api 取得
+  /// rakuten api 取得
   @override
   void initState() {
     super.initState();
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               SizedBox(height: 20),
 
-              // 横並びのカテゴリ
+              /// 横並びのカテゴリ
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -68,13 +68,11 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: TextButton(
-                            style:
-                                TextButton.styleFrom(padding: EdgeInsets.zero),
+                            style: TextButton.styleFrom(padding: EdgeInsets.zero),
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => CampaignListPage()),
+                                MaterialPageRoute(builder: (context) => CampaignListPage()),
                               );
                             },
                             child: Image.asset('${category.image}'),
@@ -88,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 20),
 
-              // ソートタブ
+              /// ソートタブ
               Text(
                 'おすすめのキャンペーン',
                 style: TextStyle(
@@ -132,9 +130,10 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 20),
 
-              // 商品リスト
+              /// 商品リスト
               item != null
-                  // 商品がapiから取得できとき
+
+                  /// 商品がapiから取得できとき
                   ? GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // grid数
@@ -187,8 +186,7 @@ class _HomePageState extends State<HomePage> {
                                                 SizedBox(width: 5),
                                                 Text(
                                                   '${item![index].price}人以上',
-                                                  style:
-                                                      TextStyle(fontSize: 11),
+                                                  style: TextStyle(fontSize: 11),
                                                 ),
                                               ],
                                             ),
@@ -208,7 +206,8 @@ class _HomePageState extends State<HomePage> {
                           ],
                         );
                       })
-                  // 商品情報をapiから取得するまだのロードのクルクル
+
+                  /// 商品情報をapiから取得するまだのロードのクルクル
                   : Center(child: LoadingWidget().circleLoading),
               SizedBox(height: 20)
             ],

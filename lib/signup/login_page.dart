@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 import 'package:toridori_clone/components/show_dialog.dart';
 import 'package:toridori_clone/main_page.dart';
 import 'package:toridori_clone/utils/authentication.dart';
-import 'package:toridori_clone/utils/firestore/users.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -134,25 +134,64 @@ class LoginPage extends StatelessWidget {
                     child: TextButton(
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          dynamic result = await Authentication.signIn(
-                            email: emailController.text,
-                            password: passwordController.text,
-                          );
-                          if (result is UserCredential) {
-                            var _result = await UserFirestore.getUser(result.user!.uid);
-                            if (_result == true) {
-                              ShowDialog.alertShowDialog(context, 'ログイン');
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MainPage(),
-                                ),
+                          dynamic result = await context.read<Authentication>().signIn(
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
                               );
-                            }
-                          } else {
-                            ShowDialog.alertShowDialog(context, result.toString());
-                          }
+                          await FirebaseAuth.instance.authStateChanges().listen(
+                            (User? user) {
+                              if (user != null) {
+                                ShowDialog.alertShowDialog(context, 'ログイン');
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MainPage(),
+                                  ),
+                                );
+                              } else {
+                                ShowDialog.alertShowDialog(context, result.toString());
+                              }
+                            },
+                          );
                         }
+                        // if (formKey.currentState!.validate()) {
+                        //   dynamic result = await context.read<Authentication>().signIn(
+                        //         email: emailController.text,
+                        //         password: passwordController.text,
+                        //       );
+                        //   FirebaseAuth.instance.authStateChanges().listen(
+                        //     (User? user) async {
+                        //       if (user != null) {
+                        //         var _result = await UserFirestore.getUser(UserFirestore.currentUser!.uid);
+                        //         if (_result == true) {
+                        //           ShowDialog.alertShowDialog(context, 'ログイン');
+                        //           Navigator.pushReplacement(
+                        //             context,
+                        //             MaterialPageRoute(
+                        //               builder: (context) => MainPage(),
+                        //             ),
+                        //           );
+                        //         } else {
+                        //           ShowDialog.alertShowDialog(context, result.toString());
+                        //         }
+                        //       }
+                        //     },
+                        //   );
+                        //   // if (result is UserCredential) {
+                        //   //   var _result = await UserFirestore.getUser(result.user!.uid);
+                        //   //   if (_result == true) {
+                        //   //     ShowDialog.alertShowDialog(context, 'ログイン');
+                        //   //     Navigator.pushReplacement(
+                        //   //       context,
+                        //   //       MaterialPageRoute(
+                        //   //         builder: (context) => MainPage(),
+                        //   //       ),
+                        //   //     );
+                        //   //   }
+                        //   // } else {
+                        //   //   ShowDialog.alertShowDialog(context, result.toString());
+                        //   // }
+                        // }
                       },
                       child: Text(
                         'ログイン',

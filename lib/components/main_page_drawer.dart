@@ -1,18 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/src/provider.dart';
 import 'package:toridori_clone/screens/appbar_drawer/profile/profile_config/profile_config_page.dart';
 import 'package:toridori_clone/screens/appbar_drawer/sns_connect_page.dart';
 import 'package:toridori_clone/signup/signup_top_page.dart';
-
-// class MainPageDrawer extends StatefulWidget {
-//   const MainPageDrawer({Key? key}) : super(key: key);
-//
-//   @override
-//   _MainPageDrawerState createState() => _MainPageDrawerState();
-// }
-//
-// class _MainPageDrawerState extends State<MainPageDrawer> {
+import 'package:toridori_clone/utils/authentication.dart';
+import 'package:toridori_clone/utils/firestore/users.dart';
 
 class MainPageDrawer extends StatelessWidget {
   @override
@@ -29,10 +25,24 @@ class MainPageDrawer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      radius: 50,
-                      child: Image.asset('images/profile_icon.jpg'),
-                    ),
+                    StreamBuilder<DocumentSnapshot>(
+                        stream: UserFirestore.snapshotsUid(),
+                        builder: (context, snapshot) {
+                          return FutureBuilder(
+                            future: UserFirestore.getUserImage(),
+                            builder: (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.connectionState == ConnectionState.done) {
+                                return CircleAvatar(
+                                  radius: 50,
+                                  foregroundImage: snapshot.data != null ? NetworkImage(snapshot.data) : AssetImage('images/profile_icon.jpg') as ImageProvider,
+                                  child: Image.asset('images/profile_icon.jpg'),
+                                );
+                              } else {
+                                return CircularProgressIndicator();
+                              }
+                            },
+                          );
+                        }),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -186,6 +196,35 @@ class MainPageDrawer extends StatelessWidget {
                     offset: Offset(-16, 0),
                   ),
                   onTap: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (BuildContext dialogContext) {
+                        return CupertinoAlertDialog(
+                          title: Text('ログアウトしますか？'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('キャンセル'),
+                              onPressed: () {
+                                Navigator.of(dialogContext).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text(
+                                'ログアウト',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () async {
+                                context.read<Authentication>().signOut();
+                                FirebaseAuth.instance.authStateChanges().listen((User? user) {
+                                  Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => new SignupTopPage()), (_) => false);
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                     //todo: ボタン処理
                     // Navigator.push(
                     //   context,
@@ -217,7 +256,43 @@ class MainPageDrawer extends StatelessWidget {
                     ),
                     offset: Offset(-16, 0),
                   ),
-                  onTap: () {
+                  onTap: () async {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (BuildContext dialogContext) {
+                        return CupertinoAlertDialog(
+                          title: Text('アカウント削除しますか？'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('キャンセル'),
+                              onPressed: () {
+                                Navigator.of(dialogContext).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text(
+                                '削除',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () async {
+                                // 削除処理
+                                try {
+                                  context.read<Authentication>();
+                                  await UserFirestore.deleteUser();
+                                  await Authentication.deleteAuth();
+                                  Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => new SignupTopPage()), (_) => false);
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'requires-recent-login') {
+                                    print('The user must reauthenticate before this operation can be executed.');
+                                  }
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                     //todo: ボタン処理
                     // Navigator.push(
                     //   context,

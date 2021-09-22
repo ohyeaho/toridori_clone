@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:toridori_clone/components/back_appbar.dart';
 import 'package:toridori_clone/components/function_image.dart';
 import 'package:toridori_clone/components/show_dialog.dart';
-import 'package:toridori_clone/models/account.dart';
-import 'package:toridori_clone/utils/authentication.dart';
 import 'package:toridori_clone/utils/firestore/users.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -16,29 +14,21 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
-//
-//
-// class ProfilePage extends StatelessWidget {
   TextEditingController nickNameController = TextEditingController();
   TextEditingController areaController = TextEditingController();
   TextEditingController introductionController = TextEditingController();
   TextEditingController tagController = TextEditingController();
-  Account myAccount = Authentication.myAccount!;
+  // Account myAccount = Authentication.myAccount!;
   File? image;
 
-  @override
-  void initState() {
-    super.initState();
-    nickNameController = TextEditingController(text: myAccount.nickName);
-    areaController = TextEditingController(text: myAccount.area);
-    introductionController = TextEditingController(text: myAccount.introduction);
-    tagController = TextEditingController(text: myAccount.tag);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   nickNameController = TextEditingController(text: myAccount.nickName);
+  //   areaController = TextEditingController(text: myAccount.area);
+  //   introductionController = TextEditingController(text: myAccount.introduction);
+  //   tagController = TextEditingController(text: myAccount.tag);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +51,27 @@ class _ProfilePageState extends State<ProfilePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CircleAvatar(
-                          foregroundImage: image == null
-                              ? myAccount.imagePath != ''
-                                  ? NetworkImage(myAccount.imagePath)
-                                  : null
-                              : FileImage(image!) as ImageProvider,
-                          radius: 40,
-                          child: Image.asset('images/profile_icon.jpg'),
+                        /// プロフィール画像表示
+                        FutureBuilder(
+                          future: UserFirestore.getUserImage(),
+                          builder: (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState == ConnectionState.done) {
+                              return CircleAvatar(
+                                radius: 40,
+                                foregroundImage: image != null
+                                    ? FileImage(image!)
+                                    : snapshot.data != null
+                                        ? NetworkImage(snapshot.data)
+                                        : AssetImage('images/profile_icon.jpg') as ImageProvider,
+                                child: Image.asset('images/profile_icon.jpg'),
+                              );
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          },
                         ),
+
+                        /// 画像変更ボタン
                         TextButton(
                           onPressed: () async {
                             var result = await FunctionImage.getImageFromGallery();
@@ -268,24 +270,40 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 300,
                   child: TextButton(
                     onPressed: () async {
-                      // String imagePath = await FunctionImage.uploadImage(Authentication.currentFirebaseUser!.uid, image!);
+                      print(image);
+                      // String imagePath = await FunctionImage.uploadImage(UserFirestore.currentUser.uid, image!);
+                      // print('imagePath:$imagePath');
                       // await UserFirestore.setUserImage(imagePath);
-                      String imagePath = '';
-                      if (image == null) {
-                        imagePath = myAccount.imagePath;
-                      } else {
-                        var result = await FunctionImage.uploadImage(Authentication.currentFirebaseUser!.uid, image!);
-                        imagePath = result;
-                      }
-                      Account updateAccount = Account(
-                        imagePath: imagePath,
-                        nickName: nickNameController.text,
-                        area: areaController.text,
-                        introduction: introductionController.text,
-                        tag: tagController.text,
-                      );
-                      Authentication.myAccount = updateAccount;
-                      var result = await UserFirestore.updateProfile(updateAccount);
+                      // String imagePath = '';
+                      // if (image == null) {
+                      //   // todo: 画像
+                      //   // imagePath = myAccount.imagePath;
+                      //   imagePath = FutureBuilder(
+                      //     future: UserFirestore.getUserImage(),
+                      //     builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      //       if (snapshot.connectionState == ConnectionState.done) {
+                      //         print('snapshot.data:${snapshot.data}');
+                      //         return snapshot.data != null ? snapshot.data : null;
+                      //       } else {
+                      //         return Text('Loading...');
+                      //       }
+                      //     },
+                      //   ) as String;
+                      // } else {
+                      //   // var result = await FunctionImage.uploadImage(UserFirestore.currentUser.uid, image!);
+                      //   // imagePath = result;
+                      //   await FunctionImage.uploadImage(UserFirestore.currentUser.uid, image!);
+                      // }
+                      if (image != null) await UserFirestore.updateUserImage(UserFirestore.currentUser, image);
+                      // Account updateAccount = Account(
+                      //   imagePath: imagePath,
+                      //   nickName: nickNameController.text,
+                      //   area: areaController.text,
+                      //   introduction: introductionController.text,
+                      //   tag: tagController.text,
+                      // );
+                      // Authentication.myAccount = updateAccount;
+                      // var result = await UserFirestore.updateProfile(updateAccount);
                       // Authentication.myAccount = updateAccount;
                       // var result = await UserFirestore.updateProfile(
                       //   imagePath: imagePath,
@@ -294,12 +312,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       //   introduction: introductionController.text,
                       //   tag: tagController.text,
                       // );
-                      if (result == true) {
-                        await ShowDialog.alertShowDialog(context, '変更を保存しました');
-                        Navigator.pop(context, true);
-                      }
-                      // await ShowDialog.alertShowDialog(context, '変更を保存しました');
-                      // Navigator.pop(context);
+                      // if (result == true) {
+                      //   await ShowDialog.alertShowDialog(context, '変更を保存しました');
+                      //   Navigator.pop(context, true);
+                      // }
+                      await ShowDialog.alertShowDialog(context, '変更を保存しました');
+                      Navigator.pop(context);
                     },
                     child: Text(
                       '変更を保存する',

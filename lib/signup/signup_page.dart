@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 import 'package:toridori_clone/components/show_dialog.dart';
 import 'package:toridori_clone/main_page.dart';
 import 'package:toridori_clone/utils/authentication.dart';
@@ -247,15 +248,15 @@ class SignupPage extends StatelessWidget {
                     child: TextButton(
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          dynamic result = await Authentication.signUp(
-                            nickName: nickNameController.text,
-                            email: emailController.text,
-                            password: passwordController.text,
-                          );
-                          if (result is UserCredential) {
+                          dynamic result = await context.read<Authentication>().signUp(
+                                nickName: nickNameController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                          if (result == true) {
                             FirebaseAuth.instance.authStateChanges().listen((User? user) async {
                               if (user != null) {
-                                await UserFirestore.setUser(
+                                UserFirestore.setUser(
                                   nickName: nickNameController.text,
                                   gender: genderController.text,
                                   birthday: birthdayController.text,
@@ -269,24 +270,6 @@ class SignupPage extends StatelessWidget {
                                 );
                               }
                             });
-                            // Account newAccount = Account(
-                            //   nickName: nickNameController.text,
-                            //   gender: genderController.text,
-                            //   birthday: birthdayController.text,
-                            //   // userId: Authentication.currentFirebaseUser!.uid,
-                            // );
-                            // await UserFirestore.setUser(
-                            //   nickName: nickNameController.text,
-                            //   gender: genderController.text,
-                            //   birthday: birthdayController.text,
-                            // );
-                            // await ShowDialog.alertShowDialog(context, '登録完了しました');
-                            // Navigator.pushReplacement(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => MainPage(),
-                            //   ),
-                            // );
                           } else {
                             ShowDialog.alertShowDialog(context, result.toString());
                           }
