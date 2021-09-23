@@ -1,26 +1,24 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toridori_clone/components/back_appbar.dart';
-import 'package:toridori_clone/components/function_image.dart';
 import 'package:toridori_clone/components/loading_widget.dart';
 import 'package:toridori_clone/screens/appbar_drawer/profile/profile_config/profile/profile_page_model.dart';
 import 'package:toridori_clone/utils/firestore/users.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class AddressTelPage extends StatefulWidget {
+  const AddressTelPage({Key? key}) : super(key: key);
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _AddressTelPageState createState() => _AddressTelPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  TextEditingController nickNameController = TextEditingController();
-  TextEditingController areaController = TextEditingController();
-  TextEditingController introductionController = TextEditingController();
-  TextEditingController tagController = TextEditingController();
-  File? image;
+class _AddressTelPageState extends State<AddressTelPage> {
+  TextEditingController zipcodeController = TextEditingController();
+  TextEditingController prefectureController = TextEditingController();
+  TextEditingController municipalitiesController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController otherAddressController = TextEditingController();
+  TextEditingController telController = TextEditingController();
 
   @override
   void initState() {
@@ -28,10 +26,12 @@ class _ProfilePageState extends State<ProfilePage> {
     Future(() async {
       var userData = await UserFirestore.getUser();
       setState(() {});
-      nickNameController = TextEditingController(text: userData['nick_name']);
-      areaController = TextEditingController(text: userData['area']);
-      introductionController = TextEditingController(text: userData['introduction']);
-      tagController = TextEditingController(text: userData['tag']);
+      zipcodeController = TextEditingController(text: userData['zipcode']);
+      prefectureController = TextEditingController(text: userData['prefecture']);
+      municipalitiesController = TextEditingController(text: userData['municipalities']);
+      addressController = TextEditingController(text: userData['address']);
+      otherAddressController = TextEditingController(text: userData['other_address']);
+      telController = TextEditingController(text: userData['tel']);
     });
   }
 
@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Stack(
         children: [
           Scaffold(
-            appBar: BackAppbar.createAppBar('プロフィールを設定する'),
+            appBar: BackAppbar.createAppBar('住所・電話番号を設定する'),
             body: Consumer<ProfileModel>(builder: (context, model, child) {
               return Stack(
                 children: [
@@ -53,58 +53,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'プロフィール画像',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                /// プロフィール画像表示
-                                FutureBuilder(
-                                  future: UserFirestore.getUserImage(),
-                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.done) {
-                                      return CircleAvatar(
-                                        radius: 40,
-                                        foregroundImage: model.image != null
-                                            ? FileImage(model.image!)
-                                            : snapshot.data != null
-                                                ? NetworkImage(snapshot.data)
-                                                : AssetImage('images/profile_icon.jpg') as ImageProvider,
-                                        child: Image.asset('images/profile_icon.jpg'),
-                                      );
-                                    } else {
-                                      return CircularProgressIndicator();
-                                    }
-                                  },
-                                ),
+                            SizedBox(height: 30),
 
-                                /// 画像変更ボタン
-                                TextButton(
-                                  onPressed: () async {
-                                    var result = await FunctionImage.getImageFromGallery();
-                                    if (result != null) {
-                                      model.setImage(File(result.path));
-                                    }
-                                  },
-                                  child: Text(
-                                    '変更する',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-                                    primary: Colors.white,
-                                    backgroundColor: Colors.red.shade800,
-                                    shape: StadiumBorder(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 40),
-
-                            /// ニックネーム
+                            /// 郵便番号
                             Container(
                               color: Colors.red.withOpacity(0.05),
                               child: Column(
@@ -113,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: Text(
-                                      'ニックネーム',
+                                      '郵便番号',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -121,7 +72,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                   TextFormField(
-                                    controller: nickNameController,
+                                    controller: zipcodeController,
+                                    keyboardType: TextInputType.number,
                                     cursorColor: Colors.red,
                                     decoration: InputDecoration(
                                       isDense: true,
@@ -139,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             SizedBox(height: 40),
 
-                            /// 主な活動エリア
+                            /// 都道府県
                             // todo: 選択型
                             Container(
                               color: Colors.red.withOpacity(0.05),
@@ -149,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: Text(
-                                      '主な活動エリア',
+                                      '都道府県',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -157,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                   TextFormField(
-                                    controller: areaController,
+                                    controller: prefectureController,
                                     cursorColor: Colors.red,
                                     decoration: InputDecoration(
                                       isDense: true,
@@ -175,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             SizedBox(height: 40),
 
-                            /// プロフィール文
+                            /// 市区町村
                             Container(
                               color: Colors.red.withOpacity(0.05),
                               child: Column(
@@ -184,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: Text(
-                                      'プロフィール文',
+                                      '市区町村',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -192,12 +144,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                   TextFormField(
-                                    controller: introductionController,
+                                    controller: municipalitiesController,
                                     cursorColor: Colors.red,
-                                    maxLength: 200,
-                                    maxLines: null,
                                     decoration: InputDecoration(
-                                      counterStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
                                       isDense: true,
                                       contentPadding: EdgeInsets.fromLTRB(8, 1, 0, 10),
                                       enabledBorder: UnderlineInputBorder(
@@ -210,15 +159,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              '興味関心、好きなことや、SNSを使う上で心がけていることなど、あなたのことをできる限り教えて下さい',
-                              style: TextStyle(color: Colors.grey.shade300),
                             ),
                             SizedBox(height: 40),
 
-                            /// マイタグ
+                            /// 住所
                             Container(
                               color: Colors.red.withOpacity(0.05),
                               child: Column(
@@ -227,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: Text(
-                                      'マイタグ',
+                                      '住所',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -235,14 +179,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                   TextFormField(
-                                    controller: tagController,
+                                    controller: addressController,
                                     cursorColor: Colors.red,
                                     decoration: InputDecoration(
-                                      hintText: 'ファッション',
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 13,
-                                      ),
                                       isDense: true,
                                       contentPadding: EdgeInsets.fromLTRB(8, 1, 0, 10),
                                       enabledBorder: UnderlineInputBorder(
@@ -256,10 +195,76 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 10),
-                            Text(
-                              'あなたを表すハッシュタグを自由に設定してください',
-                              style: TextStyle(color: Colors.grey.shade300),
+                            SizedBox(height: 40),
+
+                            /// 建物名・部屋番号
+                            Container(
+                              color: Colors.red.withOpacity(0.05),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      '建物名・部屋番号',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    controller: otherAddressController,
+                                    cursorColor: Colors.red,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.fromLTRB(8, 1, 0, 10),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red, width: 3),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 40),
+
+                            /// 電話番号
+                            Container(
+                              color: Colors.red.withOpacity(0.05),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      '電話番号',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    controller: telController,
+                                    keyboardType: TextInputType.phone,
+                                    cursorColor: Colors.red,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.fromLTRB(8, 1, 0, 10),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red, width: 3),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(height: 150),
                           ],
@@ -280,12 +285,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: TextButton(
                             onPressed: () async {
                               model.startLoading();
-                              if (image != null) await UserFirestore.updateUserImage(UserFirestore.currentUser, image);
-                              var result = await UserFirestore.updateProfile(
-                                nickName: nickNameController.text,
-                                area: areaController.text,
-                                introduction: introductionController.text,
-                                tag: tagController.text,
+                              var result = await UserFirestore.updateAddressTel(
+                                zipcode: zipcodeController.text,
+                                prefecture: prefectureController.text,
+                                municipalities: municipalitiesController.text,
+                                address: addressController.text,
+                                otherAddress: otherAddressController.text,
+                                tel: telController.text,
                               );
                               if (result == true) {
                                 print('変更を保存しました');

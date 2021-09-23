@@ -21,6 +21,17 @@ class UserFirestore {
           'introduction': '',
           'area': '',
           'tag': '',
+          'zipcode': '',
+          'prefecture': '',
+          'municipalities': '',
+          'address': '',
+          'address2': '',
+          'tel': '',
+          'payee': '',
+          'bank_account_type': '',
+          'bank_branch': '',
+          'bank_number': '',
+          'bank_holder': '',
           'created_time': Timestamp.now(),
           'updated_time': Timestamp.now(),
         })
@@ -157,6 +168,44 @@ class UserFirestore {
       return true;
     } on FirebaseException catch (e) {
       print('名前・生年月日更新エラー: $e');
+      return false;
+    }
+  }
+
+  static Future<dynamic> updateAddressTel(
+      {String? zipcode, String? prefecture, String? municipalities, String? address, String? otherAddress, String? tel}) async {
+    try {
+      await users.doc(currentUser.uid).update({
+        'zipcode': zipcode,
+        'prefecture': prefecture,
+        'municipalities': municipalities,
+        'address': address,
+        'other_address': otherAddress,
+        'tel': tel,
+        'updated_time': Timestamp.now(),
+      });
+      print('住所・電話番号更新完了');
+      return true;
+    } on FirebaseException catch (e) {
+      print('住所・電話番号更新エラー: $e');
+      return false;
+    }
+  }
+
+  static Future<dynamic> updatePayee({String? payee, String? bankAccountType, String? bankBranch, String? bankNumber, String? bankHolder}) async {
+    try {
+      await users.doc(currentUser.uid).update({
+        'payee': payee,
+        'bank_accountType': bankAccountType,
+        'bank_branch': bankBranch,
+        'bank_number': bankNumber,
+        'bank_holder': bankHolder,
+        'updated_time': Timestamp.now(),
+      });
+      print('銀行口座更新完了');
+      return true;
+    } on FirebaseException catch (e) {
+      print('銀行口座更新エラー: $e');
       return false;
     }
   }

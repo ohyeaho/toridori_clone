@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class ProfilePageModel extends ChangeNotifier {
+class ProfileModel extends ChangeNotifier {
   File? image;
   bool isLoading = false;
 

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toridori_clone/components/back_appbar.dart';
@@ -19,7 +17,6 @@ class _NameBirthdayPageState extends State<NameBirthdayPage> {
   TextEditingController nameRubyController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController birthdayController = TextEditingController();
-  File? image;
 
   @override
   void initState() {
@@ -36,13 +33,13 @@ class _NameBirthdayPageState extends State<NameBirthdayPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ProfilePageModel>(
-      create: (_) => ProfilePageModel(),
+    return ChangeNotifierProvider<ProfileModel>(
+      create: (_) => ProfileModel(),
       child: Stack(
         children: [
           Scaffold(
             appBar: BackAppbar.createAppBar('名前・生年月日を設定する'),
-            body: Consumer<ProfilePageModel>(builder: (context, model, child) {
+            body: Consumer<ProfileModel>(builder: (context, model, child) {
               return Stack(
                 children: [
                   Padding(
@@ -125,6 +122,7 @@ class _NameBirthdayPageState extends State<NameBirthdayPage> {
                             SizedBox(height: 40),
 
                             /// 性別
+                            // todo: 選択型
                             Container(
                               color: Colors.red.withOpacity(0.05),
                               child: Column(
@@ -160,6 +158,7 @@ class _NameBirthdayPageState extends State<NameBirthdayPage> {
                             SizedBox(height: 40),
 
                             /// 生年月日
+                            // todo: 選択型
                             Container(
                               color: Colors.red.withOpacity(0.05),
                               child: Column(
@@ -218,7 +217,6 @@ class _NameBirthdayPageState extends State<NameBirthdayPage> {
                                 birthday: birthdayController.text,
                               );
                               if (result == true) {
-                                // await ShowDialog.alertShowDialog(context, '変更を保存しました');
                                 print('変更を保存しました');
                                 model.endLoading();
                                 Navigator.pop(context, true);
@@ -243,7 +241,7 @@ class _NameBirthdayPageState extends State<NameBirthdayPage> {
               );
             }),
           ),
-          Consumer<ProfilePageModel>(builder: (context, model, child) {
+          Consumer<ProfileModel>(builder: (context, model, child) {
             return model.isLoading
                 ? Container(
                     color: Colors.black.withOpacity(0.3),
