@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:toridori_clone/models/account.dart';
 
 class Authentication {
   final FirebaseAuth auth;
   Authentication(this.auth);
   Stream<User?> get authState => auth.idTokenChanges();
-  // isUserLogin = _auth.currentUser?.uid ?? false;
+  static Account? myAccount;
 
   /// サインアップメソッド
   Future<dynamic> signUp({String? nickName, String? email, String? password}) async {

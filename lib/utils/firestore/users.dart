@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toridori_clone/components/function_image.dart';
-import 'package:toridori_clone/models/account.dart';
 
 class UserFirestore {
   static final User currentUser = FirebaseAuth.instance.currentUser!;
@@ -89,12 +88,24 @@ class UserFirestore {
     }
   }
 
-  // static Future<dynamic> getUser(String uid) async {
+  /// ユーザ情報取得
+  static Future getUser() async {
+    DocumentSnapshot documentSnapshot = await users.doc(currentUser.uid).get();
+    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+    if (documentSnapshot.exists) {
+      var value = await data;
+      return value;
+    } else {
+      return null;
+    }
+  }
+
+  // static Future<dynamic> getUser() async {
   //   try {
-  //     DocumentSnapshot documentSnapshot = await users.doc(uid).get();
+  //     DocumentSnapshot documentSnapshot = await users.doc(currentUser.uid).get();
   //     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
   //     Account myAccount = Account(
-  //       id: uid,
+  //       id: currentUser.uid,
   //       nickName: data['nick_name'],
   //       gender: data['gender'],
   //       birthday: data['birthday'],
@@ -106,7 +117,7 @@ class UserFirestore {
   //       createdTime: data['created_time'],
   //       updatedTime: data['updated_time'],
   //     );
-  //     // Authentication.myAccount = myAccount;
+  //     Authentication.myAccount = myAccount;
   //     print('ユーザー取得完了');
   //     return true;
   //   } on FirebaseException catch (e) {
@@ -115,14 +126,13 @@ class UserFirestore {
   //   }
   // }
 
-  static Future<dynamic> updateProfile(Account updateAccount) async {
+  static Future<dynamic> updateProfile({String? nickName, String? area, String? introduction, String? tag}) async {
     try {
       await users.doc(currentUser.uid).update({
-        'image_path': updateAccount.imagePath,
-        'nick_name': updateAccount.nickName,
-        'area': updateAccount.area,
-        'introduction': updateAccount.introduction,
-        'tag': updateAccount.tag,
+        'nick_name': nickName,
+        'area': area,
+        'introduction': introduction,
+        'tag': tag,
         'updated_time': Timestamp.now(),
       });
       print('プロフィール更新完了');

@@ -18,17 +18,20 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController areaController = TextEditingController();
   TextEditingController introductionController = TextEditingController();
   TextEditingController tagController = TextEditingController();
-  // Account myAccount = Authentication.myAccount!;
   File? image;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   nickNameController = TextEditingController(text: myAccount.nickName);
-  //   areaController = TextEditingController(text: myAccount.area);
-  //   introductionController = TextEditingController(text: myAccount.introduction);
-  //   tagController = TextEditingController(text: myAccount.tag);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    Future(() async {
+      var userData = await UserFirestore.getUser();
+      setState(() {});
+      nickNameController = TextEditingController(text: userData['nick_name']);
+      areaController = TextEditingController(text: userData['area']);
+      introductionController = TextEditingController(text: userData['introduction']);
+      tagController = TextEditingController(text: userData['tag']);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -270,54 +273,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 300,
                   child: TextButton(
                     onPressed: () async {
-                      print(image);
-                      // String imagePath = await FunctionImage.uploadImage(UserFirestore.currentUser.uid, image!);
-                      // print('imagePath:$imagePath');
-                      // await UserFirestore.setUserImage(imagePath);
-                      // String imagePath = '';
-                      // if (image == null) {
-                      //   // todo: 画像
-                      //   // imagePath = myAccount.imagePath;
-                      //   imagePath = FutureBuilder(
-                      //     future: UserFirestore.getUserImage(),
-                      //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      //       if (snapshot.connectionState == ConnectionState.done) {
-                      //         print('snapshot.data:${snapshot.data}');
-                      //         return snapshot.data != null ? snapshot.data : null;
-                      //       } else {
-                      //         return Text('Loading...');
-                      //       }
-                      //     },
-                      //   ) as String;
-                      // } else {
-                      //   // var result = await FunctionImage.uploadImage(UserFirestore.currentUser.uid, image!);
-                      //   // imagePath = result;
-                      //   await FunctionImage.uploadImage(UserFirestore.currentUser.uid, image!);
-                      // }
                       if (image != null) await UserFirestore.updateUserImage(UserFirestore.currentUser, image);
-                      // Account updateAccount = Account(
-                      //   imagePath: imagePath,
-                      //   nickName: nickNameController.text,
-                      //   area: areaController.text,
-                      //   introduction: introductionController.text,
-                      //   tag: tagController.text,
-                      // );
-                      // Authentication.myAccount = updateAccount;
-                      // var result = await UserFirestore.updateProfile(updateAccount);
-                      // Authentication.myAccount = updateAccount;
-                      // var result = await UserFirestore.updateProfile(
-                      //   imagePath: imagePath,
-                      //   nickName: nickNameController.text,
-                      //   area: areaController.text,
-                      //   introduction: introductionController.text,
-                      //   tag: tagController.text,
-                      // );
-                      // if (result == true) {
-                      //   await ShowDialog.alertShowDialog(context, '変更を保存しました');
-                      //   Navigator.pop(context, true);
-                      // }
-                      await ShowDialog.alertShowDialog(context, '変更を保存しました');
-                      Navigator.pop(context);
+                      var result = await UserFirestore.updateProfile(
+                        nickName: nickNameController.text,
+                        area: areaController.text,
+                        introduction: introductionController.text,
+                        tag: tagController.text,
+                      );
+                      if (result == true) {
+                        await ShowDialog.alertShowDialog(context, '変更を保存しました');
+                        Navigator.pop(context, true);
+                      }
                     },
                     child: Text(
                       '変更を保存する',
