@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1061427422567",
+    "project_id": "toridori-base",
+    "storage_bucket": "toridori-base.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061427422567:android:2700d05f3818401f2c7bc2",
+        "android_client_info": {
+          "package_name": "com.example.toridoriClone.toridori_clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061427422567-ednbloaetr52civ5abm6fd3ph5o0ifhd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPoQ50hXzPgTkf7qJnuTB3fuI9FIndl2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1061427422567-ednbloaetr52civ5abm6fd3ph5o0ifhd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1061427422567-j2h23qcdiabi0g16antqabn6mmf8qb51.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.toridoriClone.toridoriClone"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
