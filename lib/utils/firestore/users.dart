@@ -17,7 +17,6 @@ class UserFirestore {
           'name_ruby': '',
           'gender': gender,
           'birthday': birthday,
-          'image_path': '',
           'introduction': '',
           'area': '',
           'tag': '',
@@ -37,32 +36,14 @@ class UserFirestore {
         })
         .then((value) => print("新規ユーザー作成完了"))
         .catchError((error) => print("新規ユーザー作成エラー: $error"));
-    // try {
-    //   await users.doc(currentUser!.uid).set({
-    //     'nick_name': nickName,
-    //     'name': '',
-    //     'gender': gender,
-    //     'birthday': birthday,
-    //     'image_path': '',
-    //     'introduction': '',
-    //     'area': '',
-    //     'tag': '',
-    //     'created_time': Timestamp.now(),
-    //     'updated_time': Timestamp.now(),
-    //   });
-    //   print('新規ユーザー作成完了');
-    //   return true;
-    // } on FirebaseException catch (e) {
-    //   print('新規ユーザー作成エラー: $e');
-    //   return false;
-    // }
   }
 
-  static Future<dynamic> setUserImage(String imagePath) async {
+  /// プロフィール画像登録
+  static Future<dynamic> setUserImage(String imageUrl) async {
     try {
       await users.doc(currentUser.uid).set(
         {
-          'image_path': imagePath,
+          'image_url': imageUrl,
           'updated_time': Timestamp.now(),
         },
         SetOptions(merge: true),
@@ -75,29 +56,17 @@ class UserFirestore {
     }
   }
 
-  ///プロフィール画像更新
-  static Future updateUserImage(User user, image) async {
+  /// プロフィール画像更新
+  static Future updateUserImage(image) async {
     final imageURL = await FunctionImage.uploadImage(image);
     return users
-        .doc(user.uid)
+        .doc(currentUser.uid)
         .update({
           'image_url': imageURL,
           'updated_time': Timestamp.now(),
         })
         .then((value) => print('プロフィール画像更新完了'))
         .catchError((e) => print('プロフィール画像更新エラー: $e'));
-  }
-
-  /// プロフィール画像の取得
-  static Future getUserImage() async {
-    DocumentSnapshot documentSnapshot = await users.doc(currentUser.uid).get();
-    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    if (documentSnapshot.exists) {
-      var value = await data['image_url'];
-      return value;
-    } else {
-      return null;
-    }
   }
 
   /// ユーザ情報取得
@@ -112,32 +81,7 @@ class UserFirestore {
     }
   }
 
-  // static Future<dynamic> getUser() async {
-  //   try {
-  //     DocumentSnapshot documentSnapshot = await users.doc(currentUser.uid).get();
-  //     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-  //     Account myAccount = Account(
-  //       id: currentUser.uid,
-  //       nickName: data['nick_name'],
-  //       gender: data['gender'],
-  //       birthday: data['birthday'],
-  //       imagePath: data['image_path'],
-  //       name: data['name'],
-  //       introduction: data['introduction'],
-  //       area: data['area'],
-  //       tag: data['tag'],
-  //       createdTime: data['created_time'],
-  //       updatedTime: data['updated_time'],
-  //     );
-  //     Authentication.myAccount = myAccount;
-  //     print('ユーザー取得完了');
-  //     return true;
-  //   } on FirebaseException catch (e) {
-  //     print('ユーザー取得エラー: $e');
-  //     return false;
-  //   }
-  // }
-
+  /// プロフィール更新
   static Future<dynamic> updateProfile({String? nickName, String? area, String? introduction, String? tag}) async {
     try {
       await users.doc(currentUser.uid).update({
@@ -155,6 +99,7 @@ class UserFirestore {
     }
   }
 
+  /// 名前・生年月日更新
   static Future<dynamic> updateNameBirthday({String? name, String? nameRuby, String? gender, String? birthday}) async {
     try {
       await users.doc(currentUser.uid).update({
@@ -172,6 +117,7 @@ class UserFirestore {
     }
   }
 
+  /// 住所・電話番号更新
   static Future<dynamic> updateAddressTel(
       {String? zipcode, String? prefecture, String? municipalities, String? address, String? otherAddress, String? tel}) async {
     try {
@@ -192,6 +138,7 @@ class UserFirestore {
     }
   }
 
+  /// 支払先更新
   static Future<dynamic> updatePayee({String? payee, String? bankAccountType, String? bankBranch, String? bankNumber, String? bankHolder}) async {
     try {
       await users.doc(currentUser.uid).update({
@@ -210,24 +157,7 @@ class UserFirestore {
     }
   }
 
-  // static Future<dynamic> updateProfile({String? imagePath, String? nickName, String? area, String? introduction, String? tag}) async {
-  //   try {
-  //     await users.doc(Authentication.currentFirebaseUser!.uid).update({
-  //       'image_path': imagePath,
-  //       'nick_name': nickName,
-  //       'area': area,
-  //       'introduction': introduction,
-  //       'tag': tag,
-  //       'updated_time': Timestamp.now(),
-  //     });
-  //     print('プロフィール更新完了');
-  //     return true;
-  //   } on FirebaseException catch (e) {
-  //     print('プロフィール更新エラー: $e');
-  //     return false;
-  //   }
-  // }
-
+  /// ユーザ情報削除
   static Future<dynamic> deleteUser() async {
     users.doc(currentUser.uid).delete();
   }

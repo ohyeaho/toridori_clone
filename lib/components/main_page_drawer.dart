@@ -29,12 +29,14 @@ class MainPageDrawer extends StatelessWidget {
                         stream: UserFirestore.snapshotsUid(),
                         builder: (context, snapshot) {
                           return FutureBuilder(
-                            future: UserFirestore.getUserImage(),
+                            future: UserFirestore.getUser(),
                             builder: (BuildContext context, AsyncSnapshot snapshot) {
                               if (snapshot.connectionState == ConnectionState.done) {
                                 return CircleAvatar(
                                   radius: 50,
-                                  foregroundImage: snapshot.data != null ? NetworkImage(snapshot.data) : AssetImage('images/profile_icon.jpg') as ImageProvider,
+                                  foregroundImage: snapshot.data['image_url'] != null
+                                      ? NetworkImage(snapshot.data['image_url'])
+                                      : AssetImage('images/profile_icon.jpg') as ImageProvider,
                                   child: Image.asset('images/profile_icon.jpg'),
                                 );
                               } else {

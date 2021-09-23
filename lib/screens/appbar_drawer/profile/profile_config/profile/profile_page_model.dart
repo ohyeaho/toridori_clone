@@ -19,5 +19,6 @@ class ProfileModel extends ChangeNotifier {
   setImage(File imageFile) {
     this.image = imageFile;
     notifyListeners();
+    return image;
   }
 }

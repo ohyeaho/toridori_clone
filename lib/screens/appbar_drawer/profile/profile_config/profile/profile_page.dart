@@ -63,15 +63,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               children: [
                                 /// プロフィール画像表示
                                 FutureBuilder(
-                                  future: UserFirestore.getUserImage(),
+                                  future: UserFirestore.getUser(),
                                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                                     if (snapshot.connectionState == ConnectionState.done) {
                                       return CircleAvatar(
                                         radius: 40,
                                         foregroundImage: model.image != null
                                             ? FileImage(model.image!)
-                                            : snapshot.data != null
-                                                ? NetworkImage(snapshot.data)
+                                            : snapshot.data['image_url'] != null
+                                                ? NetworkImage(snapshot.data['image_url'])
                                                 : AssetImage('images/profile_icon.jpg') as ImageProvider,
                                         child: Image.asset('images/profile_icon.jpg'),
                                       );
@@ -86,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   onPressed: () async {
                                     var result = await FunctionImage.getImageFromGallery();
                                     if (result != null) {
-                                      model.setImage(File(result.path));
+                                      image = await model.setImage(File(result.path));
                                     }
                                   },
                                   child: Text(
@@ -280,7 +280,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: TextButton(
                             onPressed: () async {
                               model.startLoading();
-                              if (image != null) await UserFirestore.updateUserImage(UserFirestore.currentUser, image);
+                              if (image != null) await UserFirestore.updateUserImage(image);
                               var result = await UserFirestore.updateProfile(
                                 nickName: nickNameController.text,
                                 area: areaController.text,
