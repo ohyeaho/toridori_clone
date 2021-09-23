@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toridori_clone/components/back_appbar.dart';
 import 'package:toridori_clone/components/config_button.dart';
+import 'package:toridori_clone/screens/appbar_drawer/profile/profile_config/name_birthday/name_birthday_page.dart';
 import 'package:toridori_clone/screens/appbar_drawer/profile/profile_config/profile/profile_page.dart';
 
 class ProfileConfigPage extends StatelessWidget {
@@ -21,7 +22,12 @@ class ProfileConfigPage extends StatelessWidget {
           ),
           ConfigButton(
             text: '名前・生年月日',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NameBirthdayPage()),
+              );
+            },
           ),
           ConfigButton(
             text: '住所・電話番号',

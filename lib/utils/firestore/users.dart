@@ -14,6 +14,7 @@ class UserFirestore {
         .set({
           'nick_name': nickName,
           'name': '',
+          'name_ruby': '',
           'gender': gender,
           'birthday': birthday,
           'image_path': '',
@@ -70,7 +71,7 @@ class UserFirestore {
         .doc(user.uid)
         .update({
           'image_url': imageURL,
-          'updateAt': Timestamp.now(),
+          'updated_time': Timestamp.now(),
         })
         .then((value) => print('プロフィール画像更新完了'))
         .catchError((e) => print('プロフィール画像更新エラー: $e'));
@@ -139,6 +140,23 @@ class UserFirestore {
       return true;
     } on FirebaseException catch (e) {
       print('プロフィール更新エラー: $e');
+      return false;
+    }
+  }
+
+  static Future<dynamic> updateNameBirthday({String? name, String? nameRuby, String? gender, String? birthday}) async {
+    try {
+      await users.doc(currentUser.uid).update({
+        'name': name,
+        'name_ruby': nameRuby,
+        'gender': gender,
+        'birthday': birthday,
+        'updated_time': Timestamp.now(),
+      });
+      print('名前・生年月日更新完了');
+      return true;
+    } on FirebaseException catch (e) {
+      print('名前・生年月日更新エラー: $e');
       return false;
     }
   }
