@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                       })
 
                   /// 商品情報をapiから取得するまだのロードのクルクル
-                  : Center(child: LoadingWidget().circleLoading),
+                  : Center(child: LoadingWidget.circleLoading),
               SizedBox(height: 20)
             ],
           );
