@@ -71,12 +71,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                         foregroundImage: model.image != null
                                             ? FileImage(model.image!)
                                             : snapshot.data['image_url'] != null
-                                                ? NetworkImage(snapshot.data['image_url'])
-                                                : AssetImage('images/profile_icon.jpg') as ImageProvider,
+                                                ? NetworkImage(snapshot.data['image_url']) as ImageProvider
+                                                : null,
                                         child: Image.asset('images/profile_icon.jpg'),
                                       );
                                     } else {
-                                      return CircularProgressIndicator();
+                                      return CircleAvatar(
+                                        radius: 40,
+                                        child: Image.asset('images/profile_icon.jpg'),
+                                      );
                                     }
                                   },
                                 ),

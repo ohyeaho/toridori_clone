@@ -36,11 +36,14 @@ class MainPageDrawer extends StatelessWidget {
                                   radius: 50,
                                   foregroundImage: snapshot.data['image_url'] != null
                                       ? NetworkImage(snapshot.data['image_url'])
-                                      : AssetImage('images/profile_icon.jpg') as ImageProvider,
+                                      : null,
                                   child: Image.asset('images/profile_icon.jpg'),
                                 );
                               } else {
-                                return CircularProgressIndicator();
+                                return CircleAvatar(
+                                  radius: 50,
+                                  child: Image.asset('images/profile_icon.jpg'),
+                                );
                               }
                             },
                           );
@@ -219,7 +222,8 @@ class MainPageDrawer extends StatelessWidget {
                               onPressed: () async {
                                 context.read<Authentication>().signOut();
                                 FirebaseAuth.instance.authStateChanges().listen((User? user) {
-                                  Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => new SignupTopPage()), (_) => false);
+                                  Navigator.pushAndRemoveUntil(context,
+                                      new MaterialPageRoute(builder: (context) => new SignupTopPage()), (_) => false);
                                 });
                               },
                             ),
@@ -283,7 +287,8 @@ class MainPageDrawer extends StatelessWidget {
                                   context.read<Authentication>();
                                   await UserFirestore.deleteUser();
                                   await Authentication.deleteAuth();
-                                  Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => new SignupTopPage()), (_) => false);
+                                  Navigator.pushAndRemoveUntil(context,
+                                      new MaterialPageRoute(builder: (context) => new SignupTopPage()), (_) => false);
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'requires-recent-login') {
                                     print('The user must reauthenticate before this operation can be executed.');
