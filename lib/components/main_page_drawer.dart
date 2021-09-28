@@ -116,17 +116,17 @@ class MainPageDrawer extends StatelessWidget {
                     ),
                     offset: Offset(-16, 0),
                   ),
-                  // todo: 未完成 やることマーク対応
-                  // trailing: Icon(
-                  //   Icons.circle,
-                  //   color: Colors.red,
-                  // ),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ProfileConfigPage()),
                     );
                   },
+                  // todo: 未完成 やることマーク対応
+                  // trailing: Icon(
+                  //   Icons.circle,
+                  //   color: Colors.red,
+                  // ),
                 ),
                 ListTile(
                   title: Transform.translate(
