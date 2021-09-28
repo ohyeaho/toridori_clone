@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/src/provider.dart';
+import 'package:toridori_clone/screens/appbar_drawer/other_page.dart';
 import 'package:toridori_clone/screens/appbar_drawer/profile/profile_config/profile_config_page.dart';
 import 'package:toridori_clone/screens/appbar_drawer/sns_connect_page.dart';
 import 'package:toridori_clone/signup/signup_top_page.dart';
@@ -137,7 +138,6 @@ class MainPageDrawer extends StatelessWidget {
                     offset: Offset(-16, 0),
                   ),
                   onTap: () {
-                    //todo: ボタン処理
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SnsConnectPage()),
@@ -262,6 +262,21 @@ class MainPageDrawer extends StatelessWidget {
                     ),
                     offset: Offset(-16, 0),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OtherPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Transform.translate(
+                    child: Text(
+                      'フォーム入力IDはこちら',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    offset: Offset(-16, 0),
+                  ),
                   onTap: () async {
                     showDialog(
                       context: context,
@@ -300,22 +315,6 @@ class MainPageDrawer extends StatelessWidget {
                         );
                       },
                     );
-                    //todo: ボタン処理
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SnsConnect()),
-                    // );
-                  },
-                ),
-                ListTile(
-                  title: Transform.translate(
-                    child: Text(
-                      'フォーム入力IDはこちら',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    offset: Offset(-16, 0),
-                  ),
-                  onTap: () {
                     //todo: ボタン処理
                     // Navigator.push(
                     //   context,
