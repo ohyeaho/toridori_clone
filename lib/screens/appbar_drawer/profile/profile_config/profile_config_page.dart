@@ -15,39 +15,19 @@ class ProfileConfigPage extends StatelessWidget {
         children: [
           ConfigButton(
             text: 'プロフィール情報',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
-            },
+            onPressed: ProfilePage(),
           ),
           ConfigButton(
             text: '名前・生年月日',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NameBirthdayPage()),
-              );
-            },
+            onPressed: NameBirthdayPage(),
           ),
           ConfigButton(
             text: '住所・電話番号',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddressTelPage()),
-              );
-            },
+            onPressed: AddressTelPage(),
           ),
           ConfigButton(
             text: '振込先',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PayeePage()),
-              );
-            },
+            onPressed: PayeePage(),
           ),
         ],
       ),
