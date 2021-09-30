@@ -11,7 +11,7 @@ import 'package:toridori_clone/signup/signup_top_page.dart';
 import 'package:toridori_clone/utils/authentication.dart';
 import 'package:toridori_clone/utils/firestore/users.dart';
 
-class MainPageDrawer extends StatelessWidget {
+class ConditionEndDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -22,8 +22,6 @@ class MainPageDrawer extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // todo: UserAccountsDrawerHeader Widget使用
-                // UserAccountsDrawerHeader(accountName: accountName, accountEmail: accountEmail,currentAccountPicture: ,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
