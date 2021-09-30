@@ -5,8 +5,7 @@ class MainPageAppbar extends StatelessWidget implements PreferredSizeWidget {
   final title;
   final Size preferredSize;
 
-  MainPageAppbar({required this.title})
-      : preferredSize = Size.fromHeight(kToolbarHeight);
+  MainPageAppbar({required this.title}) : preferredSize = Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
