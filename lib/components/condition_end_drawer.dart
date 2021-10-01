@@ -154,7 +154,9 @@ class ConditionEndDrawer extends StatelessWidget {
                         height: 55,
                         width: 130,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                           child: Text(
                             '探す',
                             style: TextStyle(fontSize: 16),

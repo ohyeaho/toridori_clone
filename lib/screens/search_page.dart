@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:toridori_clone/components/condition_end_drawer.dart';
+import 'package:toridori_clone/components/loading_widget.dart';
 import 'package:toridori_clone/components/main_page_drawer.dart';
+import 'package:toridori_clone/models/rakuten_api.dart';
 import 'package:toridori_clone/screens/appbar_drawer/check_offer_page.dart';
 
 class SearchPage extends StatefulWidget {
@@ -10,6 +13,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateMixin {
   TabController? _tabController;
+  List<Item>? item;
   GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
 
   @override
@@ -53,7 +57,10 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
       ),
       drawer: SafeArea(child: MainPageDrawer()),
       endDrawer: SafeArea(child: ConditionEndDrawer()),
-      body: _tabBody(),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: _tabBody(),
+      ),
     );
   }
 
@@ -61,10 +68,10 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
     return TabBarView(
       controller: _tabController,
       children: [
-        Container(child: Center(child: Icon(Icons.car_rental, color: Colors.white, size: 100))),
-        Container(child: Center(child: Icon(Icons.car_rental, color: Colors.white, size: 100))),
-        Container(child: Center(child: Icon(Icons.car_rental, color: Colors.white, size: 100))),
-        Container(child: Center(child: Icon(Icons.car_rental, color: Colors.white, size: 100))),
+        _tabSortNew(),
+        _tabSortNew(),
+        _tabSortNew(),
+        _tabSortNew(),
       ],
     );
   }
@@ -124,6 +131,97 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
           shape: StadiumBorder(),
         ),
       ),
+    );
+  }
+
+  Widget _tabSortNew() {
+    return FutureBuilder(
+      future: Item.getItem('おすすめ'),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          item = snapshot.data;
+          return snapshot.data != null
+              ? ListView(
+                  children: [
+                    GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // grid数
+                          crossAxisSpacing: 18, // grid間横スペース
+                          mainAxisSpacing: 20, // grid間縦スペース
+                          childAspectRatio: 0.65, // grid大きさ
+                        ),
+                        physics: NeverScrollableScrollPhysics(), // listスクロール無効
+                        shrinkWrap: true, // list余白削除
+                        itemCount: item!.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              Expanded(
+                                flex: 28,
+                                child: Image.network(
+                                  '${item![index].image}',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Expanded(
+                                  flex: 13,
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        flex: 5,
+                                        child: Text(
+                                          '${item![index].name}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 3,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 6,
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    FontAwesomeIcons.instagram,
+                                                    color: Colors.purple,
+                                                    size: 15,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    '${item![index].price}人以上',
+                                                    style: TextStyle(fontSize: 11),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Icon(
+                                                Icons.favorite,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                            ],
+                          );
+                        }),
+                  ],
+                )
+              : Center(child: LoadingWidget.circleLoading);
+        } else {
+          return Center(child: LoadingWidget.circleLoading);
+        }
+      },
     );
   }
 }
