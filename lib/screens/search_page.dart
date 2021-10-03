@@ -53,7 +53,7 @@ class _SearchPageState extends State<SearchPage> with SingleTickerProviderStateM
             ),
           ),
         ],
-        bottom: PreferredSize(preferredSize: Size.fromHeight(48), child: _buildTabsRow()),
+        bottom: PreferredSize(preferredSize: Size.fromHeight(80), child: _buildTabsRow()),
       ),
       drawer: SafeArea(child: MainPageDrawer()),
       endDrawer: SafeArea(child: ConditionEndDrawer()),
