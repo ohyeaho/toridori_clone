@@ -141,7 +141,15 @@ class LoginPage extends StatelessWidget {
                           await FirebaseAuth.instance.authStateChanges().listen(
                             (User? user) {
                               if (user != null) {
-                                ShowDialog.alertShowDialog(context, 'ログイン');
+                                // ShowDialog.alertShowDialog(context, 'ログイン');
+                                ShowDialog(
+                                  doubleButtonOrNot: false,
+                                  title: 'ログイン',
+                                  buttonText: '完了',
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ).alertShowDialog(context);
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -149,7 +157,15 @@ class LoginPage extends StatelessWidget {
                                   ),
                                 );
                               } else {
-                                ShowDialog.alertShowDialog(context, result.toString());
+                                ShowDialog(
+                                  doubleButtonOrNot: false,
+                                  title: result.toString(),
+                                  buttonText: '戻る',
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ).alertShowDialog(context);
+                                // ShowDialog.alertShowDialog(context, result.toString());
                               }
                             },
                           );

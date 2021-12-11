@@ -261,7 +261,15 @@ class SignupPage extends StatelessWidget {
                                   gender: genderController.text,
                                   birthday: birthdayController.text,
                                 );
-                                await ShowDialog.alertShowDialog(context, '登録完了しました');
+                                await ShowDialog(
+                                  doubleButtonOrNot: false,
+                                  title: '登録完了しました',
+                                  buttonText: '完了',
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ).alertShowDialog(context);
+                                // await ShowDialog.alertShowDialog(context, '登録完了しました');
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -271,7 +279,15 @@ class SignupPage extends StatelessWidget {
                               }
                             });
                           } else {
-                            ShowDialog.alertShowDialog(context, result.toString());
+                            ShowDialog(
+                              doubleButtonOrNot: false,
+                              title: result.toString(),
+                              buttonText: '戻る',
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ).alertShowDialog(context);
+                            // ShowDialog.alertShowDialog(context, result.toString());
                           }
                         }
                       },

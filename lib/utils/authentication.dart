@@ -50,6 +50,8 @@ class Authentication {
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
         return 'パスワードが間違っています';
+      } else {
+        return 'メールアドレスまたはパスワードが間違っています';
       }
     }
   }

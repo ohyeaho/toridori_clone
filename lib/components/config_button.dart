@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ConfigButton extends StatelessWidget {
   final String? text;
-  final Function()? onPressed;
+  final onPressed;
 
   ConfigButton({@required this.text, @required this.onPressed});
 
@@ -32,7 +32,13 @@ class ConfigButton extends StatelessWidget {
               ],
             ),
           ),
-          onPressed: onPressed,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => onPressed),
+            );
+          },
+          // onPressed: onPressed,
           style: TextButton.styleFrom(primary: Colors.white),
         ),
       ),

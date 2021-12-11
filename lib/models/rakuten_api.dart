@@ -20,7 +20,7 @@ class Item {
     this.time,
   });
 
-  // item info test
+  /// item info get
   static Future<List<Item>?> getItem(String keyword) async {
     var _keyword = Uri.encodeComponent(keyword); // utf-8にエンコード
     var applicationId = 1018749470638496278;
@@ -40,7 +40,7 @@ class Item {
       }).toList();
       return items;
     } catch (e) {
-      print('エラー: $e');
+      print('getItem エラー: $e');
       return null;
     }
   }
