@@ -22,8 +22,6 @@ class MainPageDrawer extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // todo: UserAccountsDrawerHeader Widget使用
-                // UserAccountsDrawerHeader(accountName: accountName, accountEmail: accountEmail,currentAccountPicture: ,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,11 +31,14 @@ class MainPageDrawer extends StatelessWidget {
                         builder: (context, snapshot) {
                           return FutureBuilder(
                             future: UserFirestore.getUser(),
-                            builder: (BuildContext context, AsyncSnapshot snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done) {
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
                                 return CircleAvatar(
                                   radius: 50,
-                                  foregroundImage: snapshot.data['image_url'] != null
+                                  foregroundImage: snapshot.data['image_url'] !=
+                                          null
                                       ? NetworkImage(snapshot.data['image_url'])
                                       : null,
                                   child: Image.asset('images/profile_icon.jpg'),
@@ -55,7 +56,8 @@ class MainPageDrawer extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SnsConnectPage()),
+                          MaterialPageRoute(
+                              builder: (context) => SnsConnectPage()),
                         );
                       },
                       child: Row(
@@ -122,7 +124,8 @@ class MainPageDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ProfileConfigPage()),
+                      MaterialPageRoute(
+                          builder: (context) => ProfileConfigPage()),
                     );
                   },
                   // todo: 未完成 やることマーク対応
@@ -156,10 +159,10 @@ class MainPageDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     //todo: ボタン処理
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignupTopPage()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SignupTopPage()),
+                    // );
                   },
                 ),
                 ListTile(
@@ -223,9 +226,15 @@ class MainPageDrawer extends StatelessWidget {
                               ),
                               onPressed: () async {
                                 context.read<Authentication>().signOut();
-                                FirebaseAuth.instance.authStateChanges().listen((User? user) {
-                                  Navigator.pushAndRemoveUntil(context,
-                                      new MaterialPageRoute(builder: (context) => new SignupTopPage()), (_) => false);
+                                FirebaseAuth.instance
+                                    .authStateChanges()
+                                    .listen((User? user) {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new SignupTopPage()),
+                                      (_) => false);
                                 });
                               },
                             ),
@@ -304,11 +313,16 @@ class MainPageDrawer extends StatelessWidget {
                                   context.read<Authentication>();
                                   await UserFirestore.deleteUser();
                                   await Authentication.deleteAuth();
-                                  Navigator.pushAndRemoveUntil(context,
-                                      new MaterialPageRoute(builder: (context) => new SignupTopPage()), (_) => false);
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new SignupTopPage()),
+                                      (_) => false);
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'requires-recent-login') {
-                                    print('The user must reauthenticate before this operation can be executed.');
+                                    print(
+                                        'The user must reauthenticate before this operation can be executed.');
                                   }
                                 }
                               },

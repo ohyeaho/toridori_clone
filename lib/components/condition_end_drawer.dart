@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:toridori_clone/screens/home/search/search_keyword_page.dart';
 
 class ConditionEndDrawer extends StatelessWidget {
+  final TextEditingController keywordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -131,6 +134,7 @@ class ConditionEndDrawer extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextFormField(
+                    controller: keywordController,
                     cursorColor: Colors.red,
                     decoration: InputDecoration(
                       prefixIcon: Icon(
@@ -177,8 +181,13 @@ class ConditionEndDrawer extends StatelessWidget {
                         height: 55,
                         width: 130,
                         child: TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
+                          onPressed: () async {
+                            // dynamic result = await Item.getItem(keywordController.text);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SearchKeywordPage(keyword: keywordController.text)),
+                            );
+                            // Navigator.pop(context);
                           },
                           child: Text(
                             '探す',
