@@ -38,23 +38,35 @@ class SignupTopPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 56.0),
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Image.asset('images/toridori_signup_icon.jpg'),
+                        Expanded(
+                          flex: 6,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child:
+                                Image.asset('images/toridori_signup_icon.jpg'),
+                          ),
                         ),
-                        FittedBox(
-                          child: Text(
-                            'toridori',
-                            style: TextStyle(
-                              fontSize: 100,
-                              fontWeight: FontWeight.bold,
+                        Expanded(
+                          flex: 2,
+                          child: FittedBox(
+                            child: Text(
+                              'toridori',
+                              style: TextStyle(
+                                fontSize: 100,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                        // SizedBox(height: 10),
-                        Text(
-                          'base',
-                          style: TextStyle(fontSize: 18),
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              'base',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
                         ),
                       ],
                     ),
