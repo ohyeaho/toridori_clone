@@ -33,32 +33,33 @@ class SignupTopPage extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                    flex: 6,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 56.0),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Image.asset('images/toridori_signup_icon.jpg'),
-                          ),
-                          FittedBox(
-                            child: Text(
-                              'toridori',
-                              style: TextStyle(
-                                fontSize: 100,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  flex: 6,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 56.0),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Image.asset('images/toridori_signup_icon.jpg'),
+                        ),
+                        FittedBox(
+                          child: Text(
+                            'toridori',
+                            style: TextStyle(
+                              fontSize: 100,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Text(
-                            'base',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    )),
+                        ),
+                        // SizedBox(height: 10),
+                        Text(
+                          'base',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Expanded(
                   flex: 1,
                   child: FittedBox(
@@ -73,7 +74,8 @@ class SignupTopPage extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: '利用規約',
-                                style: TextStyle(decoration: TextDecoration.underline),
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     // todo: 利用規約表示処理
@@ -83,7 +85,8 @@ class SignupTopPage extends StatelessWidget {
                               TextSpan(text: 'と'),
                               TextSpan(
                                 text: 'プライバシーポリシー',
-                                style: TextStyle(decoration: TextDecoration.underline),
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     // todo: プライバシーポリシー表示処理
